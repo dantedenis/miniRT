@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:42 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/11/22 14:09:23 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/08 22:54:46 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define ARROW_LEFT 123
 # define ARROW_DOWN 125
 # define ARROW_RIGHT 124
-# define ESC 53
+# define ESC 65307
 # define BUTTON_C 8
 # define BUTTON_PLUS 69
 # define BUTTON_MINUS 78

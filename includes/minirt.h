@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/08 17:02:25 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/09 09:32:49 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 # include "mlx.h"
 # include "libft.h"
+# define FLT_MAX 3.402823e+38
 
 typedef struct s_img
 {
@@ -36,6 +37,13 @@ typedef struct s_vec
 	float	z;
 }	t_vec;
 
+typedef struct s_color
+{
+	int	x;
+	int	y;
+	int	z;
+}	t_color;
+
 typedef struct s_cam
 {
 	t_vec	pos;
@@ -43,24 +51,20 @@ typedef struct s_cam
 	float	fov;
 }	t_cam;
 
-typedef struct s_alight
-{
-	float	l_ratio;
-	int		color;
-}	t_alight;
-
 typedef struct s_light
 {
-	t_vec	pos;
-	float	l_ratio;
-	int		color;
+	char			*type;
+	t_vec			*pos;
+	float			l_ratio;
+	int				color;
+	struct s_light	*next;
 }	t_light;
 
 typedef struct s_sph
 {
 	t_vec	cntr;
 	float	radius;
-	int		color;
+	t_color	color;
 }	t_sph;
 
 
@@ -73,9 +77,12 @@ typedef struct s_data
 	int			h;	
 	float		whratio;
 	t_list		*figs;
+	t_light		*light;
 }	t_data;
 
 int	pcolor(int r, int g, int b);
+int	mul_pcolor(int r, int g, int b, float i);
+
 
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 double	ft_atof(char *str);
@@ -95,6 +102,9 @@ t_vec	*vec_sub(t_vec *a, t_vec *b);
 float	vec_scalar_mul(t_vec *a, t_vec *b);
 float	vec_len(t_vec *a);
 void	vec_norm(t_vec *a);
+t_vec	*vec_sum(t_vec *a, t_vec *b);
+t_vec	*vec_mul_nbr(t_vec *a, float k);
+void	print_vec(t_vec *vec, char *name);
 
 /*
 **	FIGURE_INIT
@@ -102,4 +112,11 @@ void	vec_norm(t_vec *a);
 
 t_sph	*new_sph(float x, float y, float z, float radius, int color);
 
+/*
+**
+*/
+
+t_light	*new_light(char *type, t_vec *pos, float ratio, int color);
+void	light_add(t_light **light, t_light *new);
+void	clear_lst_light(t_light	**lst);
 #endif
