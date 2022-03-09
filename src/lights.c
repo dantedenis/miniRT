@@ -1,47 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_figure.c                                      :+:      :+:    :+:   */
+/*   lights.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/08 16:11:29 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 13:24:41 by lcoreen          ###   ########.fr       */
+/*   Created: 2022/03/09 00:12:15 by lcoreen           #+#    #+#             */
+/*   Updated: 2022/03/09 13:26:38 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_sph	*new_sph(t_vec *cntr, float radius, t_color *color)
+t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color)
 {
-	t_sph	*ret;
+	t_light	*elem;
 
-	ret = (t_sph *) malloc(sizeof(t_sph));
-	if (!ret)
+	elem = (t_light *) malloc(sizeof(t_light));
+	if (elem == NULL)
 		return (NULL);
-	ret->cntr = cntr;
-	ret->radius = radius;
-	ret->color = color;
-	ret->next = NULL;
-	return (ret);
+	elem->pos = pos;
+	elem->type = type;
+	elem->l_ratio = ratio;
+	elem->color = color;
+	elem->next = NULL;
+	return (elem);
 }
 
-void	sph_add(t_sph **sph, t_sph *new)
+void	light_add(t_light **light, t_light *new)
 {
-	new->next = *sph;
-	*sph = new;
+	new->next = *light;
+	*light = new;
 }
 
-void	clear_lst_sph(t_sph	**lst)
+void	clear_lst_light(t_light	**lst)
 {
-	t_sph	*next;
-	t_sph	*begin;
+	t_light	*next;
+	t_light	*begin;
 
 	begin = *lst;
 	while (begin)
 	{
 		next = begin->next;
-		free(begin->cntr);
+		free(begin->pos);
 		free(begin->color);
 		free(begin);
 		begin = next;

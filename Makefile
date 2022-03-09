@@ -6,7 +6,7 @@
 #    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/08 16:56:39 by lcoreen          ###   ########.fr        #
+#    Updated: 2022/03/09 13:10:49 by lcoreen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC_PATH	=	./src/
 
 SRC_LST		=	main.c		init_figure.c	key_hooks.c\
 				message.c	pixel_draw.c	vector_operations.c\
-				utils.c		colors.c
+				utils.c		colors.c		lights.c
 
 OBJ_PATH		=	./bin/
 
