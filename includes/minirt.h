@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 15:50:26 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 22:00:16 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_data
 	t_vec		*ray;
 	t_sph		*sph;
 	t_light		*light;
+	t_cam		cam;
 }	t_data;
 
 /*
@@ -101,6 +102,8 @@ int		key_hook(int button, t_data *data);
 
 void	help(void);
 void	error(char *msg);
+
+void	draw(t_data *data);
 
 /*
 **	VECTOR OPERATIONS

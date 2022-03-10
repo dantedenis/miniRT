@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   keys.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:42 by lcoreen           #+#    #+#             */
-/*   Updated: 2021/11/22 14:09:23 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 21:53:16 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,7 @@
 # define BUTTON_C 8
 # define BUTTON_PLUS 69
 # define BUTTON_MINUS 78
+# define KEY_5 22
+# define KEY_6 23
 
 #endif

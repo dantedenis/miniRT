@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 16:42:22 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 22:04:42 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,8 @@ void	draw(t_data *data)
 		error(ERROR_IMG);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 			&data->img.line_length, &data->img.endian);
-	o = new_vector(0, 0, 0);
+	//o = new_vector(0, 0, 0);
+	o = &data->cam.pos;
 	while (y < data->h)
 	{
 		x = 0;
@@ -162,7 +163,7 @@ void	draw(t_data *data)
 		}
 		++y;
 	}
-	free(o);
+	//free(o);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 	mlx_destroy_image(data->mlx, data->img.img);
 }
@@ -180,6 +181,7 @@ int	main(int argc, char **argv)
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
 	data.sph = NULL;
+	ft_bzero(&data.cam.pos, sizeof(t_vec));/// ADDD
 	sph_add(&data.sph, new_sph(new_vector(0, -1, 3), 1, new_color(255, 0, 0)));
 	sph_add(&data.sph, new_sph(new_vector(-2, 0, 4), 1, new_color(0, 255, 0)));
 	sph_add(&data.sph, new_sph(new_vector(2, 0, 4), 1, new_color(0, 0, 255)));
