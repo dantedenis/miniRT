@@ -6,7 +6,11 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:04 by lcoreen           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/03/09 00:23:52 by lcoreen          ###   ########.fr       */
+=======
+/*   Updated: 2022/03/09 13:16:05 by lcoreen          ###   ########.fr       */
+>>>>>>> origin/master
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +20,7 @@
 static int	close_esc(t_data *data)
 {
 	mlx_destroy_window(data->mlx, data->win);
-	ft_lstclear(&data->figs, free);
+	clear_lst_sph(&data->sph);
 	clear_lst_light(&data->light);
 	exit(0);
 	return (0);

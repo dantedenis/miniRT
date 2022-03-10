@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 14:29:48 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 09:20:16 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 17:05:53 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ t_vec	*vec_sum(t_vec *a, t_vec *b)
 
 	ret = new_vector(a->x + b->x, a->y + b->y, a->z + b->z);
 	return (ret);
+}
+
+void	vec_sum_inplace(t_vec *a, t_color *b, float k)
+{
+	a->x += k * b->r / 255;
+	a->y += k * b->g / 255;
+	a->z += k * b->b / 255;
 }
 
 t_vec	*vec_sub(t_vec *a, t_vec *b)

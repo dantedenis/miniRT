@@ -6,13 +6,13 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 00:12:15 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 09:19:43 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 17:06:14 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_light	*new_light(char *type, t_vec *pos, float ratio, int color)
+t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color)
 {
 	t_light	*elem;
 
@@ -22,7 +22,7 @@ t_light	*new_light(char *type, t_vec *pos, float ratio, int color)
 	elem->pos = pos;
 	elem->type = type;
 	elem->l_ratio = ratio;
-	elem->color;
+	elem->color = color;
 	elem->next = NULL;
 	return (elem);
 }
@@ -43,7 +43,7 @@ void	clear_lst_light(t_light	**lst)
 	{
 		next = begin->next;
 		free(begin->pos);
-		free(begin->type);
+		free(begin->color);
 		free(begin);
 		begin = next;
 	}

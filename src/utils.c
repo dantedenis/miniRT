@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 00:18:05 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 17:05:59 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,10 @@ double	ft_atof(char *str)
 	return (res * sign / pow(10, deg));
 }
 
-int	close_crest(void *param)
+int	close_crest(t_data *data)
 {
-	t_data	*tmp;
-
-	tmp = (t_data *) param;
-	mlx_destroy_window(tmp->mlx, tmp->win);
-	ft_lstclear(&tmp->figs, free);
+	mlx_destroy_window(data->mlx, data->win);
+	clear_lst_sph(&data->sph);
+	clear_lst_light(&data->light);
 	exit(0);
 }

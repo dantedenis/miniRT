@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
+#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/08 16:56:39 by lcoreen          ###   ########.fr        #
+#    Updated: 2022/03/09 18:33:56 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ SRC_PATH	=	./src/
 
 SRC_LST		=	main.c		init_figure.c	key_hooks.c\
 				message.c	pixel_draw.c	vector_operations.c\
-				utils.c		colors.c
+				utils.c		colors.c		lights.c
 
 OBJ_PATH		=	./bin/
 
@@ -38,6 +38,7 @@ all	:	$(LIBS) $(OBJ_PATH) $(NAME)
 
 $(LIBS)	:
 		make -C ./libft all bonus
+		$ make -C ./minilibx
 
 $(OBJ_PATH)	:
 		mkdir -p $(OBJ_PATH)
@@ -50,6 +51,7 @@ $(OBJ_PATH)%.o : %.c $(HEADERS)
 
 clean :
 	make -C ./libft clean
+	make -C ./minilibx clean
 	rm -rf $(OBJ_PATH)
 
 fclean : clean

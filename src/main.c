@@ -6,38 +6,14 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/09 09:31:25 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 17:05:44 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "errors.h"
 
-float	compute_light(t_light *light, t_vec *P, t_vec *N)
-{
-	float	i;
-	t_vec	*L;
-	float	L_dot_N;
-	
-	i = 0;
-	while (light)
-	{
-		if (!ft_strncmp(light->type, "A", 2))
-			i += light->l_ratio;
-		else
-		{
-			L = vec_sub(light->pos, P);
-			L_dot_N = vec_scalar_mul(L, N);
-			if (L_dot_N > 0)
-				i += light->l_ratio * L_dot_N / vec_len(L);
-			free(L);
-		}
-		light = light->next;
-	}
-	return (i);
-}
-
-float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec	*o, float *t2)
+float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2)
 {
 	float		k1;
 	float		k2;
@@ -45,7 +21,7 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec	*o, float *t2)
 	float	descr;
 	t_vec	*oc;
 
-	oc = vec_sub(o, &tmp->cntr);
+	oc = vec_sub(o, tmp->cntr);
 	k1 = vec_scalar_mul(ray, ray);
 	k2 = 2 * vec_scalar_mul(ray, oc);
 	k3 = vec_scalar_mul(oc, oc) - pow(tmp->radius, 2);
@@ -60,63 +36,101 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec	*o, float *t2)
 	return ((-k2 + sqrt(descr)) / (2 * k1));
 }
 
-int	get_color(t_data *data, t_vec *ray, t_vec *o, float t_min)
+t_sph	*trasing(t_data *data, t_vec *o, float t_min, float t_max)
 {
 	float	closest;
-	t_list	*closest_fig;
+	t_sph	*closest_sph;
 	float	t2;
 	float	t1;
-	t_list	*figs;
+	t_sph	*sph;
+	
+	closest = FLT_MAX;
+	closest_sph = NULL;
+	sph = data->sph;
+	while (sph)
+	{
+		t1 = intersect_sphere(sph, data->ray, o, &t2);
+		if ((t1 > t_min && t1 < t_max) && t1 < closest)
+		{
+			closest_sph = sph;
+			closest_sph->t_close = t1;
+		}
+		if ((t1 > t_min && t1 < t_max) && t2 < closest)
+		{
+			closest_sph = sph;
+			closest_sph->t_close = t2;
+		}
+		sph = sph->next;
+	}
+	return (closest_sph);
+}
+
+t_vec	*compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N)
+{
+	t_vec	*i;
+	float	L_dot_N;
+	t_sph	*close_sph;
+	
+	i = new_vector(0, 0, 0);
+	while (light)
+	{
+		if (!ft_strncmp(light->type, "A", 2))
+			vec_sum_inplace(i, light->color, light->l_ratio);
+		else
+		{
+			free(data->ray);
+			data->ray = vec_sub(light->pos, P);
+			close_sph = trasing(data, P, 0.001, 1);
+			if (close_sph)
+			{
+				light = light->next;
+				continue ;
+			}
+			L_dot_N = vec_scalar_mul(data->ray, N);
+			if (L_dot_N > 0)
+				vec_sum_inplace(i, light->color, light->l_ratio * L_dot_N / vec_len(data->ray));
+		}
+		light = light->next;
+	}
+	return (i);
+}
+
+int	get_color(t_data *data, t_vec *o)
+{
 	t_vec	*P;
 	t_vec	*N;
 	t_vec	*closest_ray;
+	t_sph	*closest_sph;
+	int		color;
 
-	closest = FLT_MAX;
-	closest_fig = NULL;
-	figs = data->figs;
-	while (figs)
-	{
-		t1 = intersect_sphere((t_sph *) figs->content, ray, o, &t2);
-		if ((t1 > t_min && t1 < FLT_MAX) && t1 < closest)
-		{
-			closest = t1;
-			closest_fig = figs;
-		}
-		if ((t1 > t_min && t1 < FLT_MAX) && t2 < closest)
-		{
-			closest = t2;
-			closest_fig = figs;
-		}
-		figs = figs->next;
-	}
-	if (closest_fig == NULL)
+	closest_sph = trasing(data, o, 1, FLT_MAX);
+	if (closest_sph == NULL)
 		return (0);
-	closest_ray = vec_mul_nbr(ray, closest);
+	closest_ray = vec_mul_nbr(data->ray, closest_sph->t_close);
 	P = vec_sum(closest_ray, o);
-	N = vec_sub(P, &((t_sph *) closest_fig->content)->cntr);
+	N = vec_sub(P, closest_sph->cntr);
 	vec_norm(N);
-	float	i = 1;
-	i = compute_light(data->light, P, N);
 	free(closest_ray);
+	closest_ray = compute_light(data, data->light, P, N);
 	free(P);
 	free(N);
-	return (((t_sph *) closest_fig->content)->color * i);
-	return (mul_pcolor())
+	color = mul_pcolor(closest_sph->color, closest_ray);
+	free(closest_ray);
+	return (color);
 }
 
 int	ray_trase(t_data *data, t_vec *o, int x, int y)
 {
 	float	sc_x;
 	float	sc_y;
-	t_vec	*ray;
 	int		color;
 	
 	(void) o;
 	sc_x = (float) x / data->w;
 	sc_y = data->whratio * y / data->h;
-	ray = new_vector(sc_x, sc_y, 1);
-	color = get_color(data, ray, o, 1);
-	free(ray);
+	data->ray = new_vector(sc_x, sc_y, 1);
+	color = get_color(data, o);
+	free(data->ray);
 	return (color);
 }
 
@@ -166,13 +180,15 @@ int	main(int argc, char **argv)
 	data.w = 800;
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
-	data.figs = NULL;
-	ft_lstadd_back(&data.figs, ft_lstnew(new_sph(0, -1, 3, 1, pcolor(255, 0, 0))));
-	ft_lstadd_back(&data.figs, ft_lstnew(new_sph(2, 0, 4, 1, pcolor(0, 255, 0))));
-	ft_lstadd_back(&data.figs, ft_lstnew(new_sph(-2, 0, 4, 1, pcolor(0, 0, 255))));
+	data.sph = NULL;
+	sph_add(&data.sph, new_sph(new_vector(0, -1, 3), 1, new_color(255, 0, 0)));
+	sph_add(&data.sph, new_sph(new_vector(-2, 0, 4), 1, new_color(0, 255, 0)));
+	sph_add(&data.sph, new_sph(new_vector(2, 0, 4), 1, new_color(0, 0, 255)));
+	sph_add(&data.sph, new_sph(new_vector(0, -5001, 0), 5000, new_color(255, 255, 0)));
 	data.light = NULL;
-	light_add(&data.light, new_light(ft_strdup("A"), NULL, 0.2, 0));
-	light_add(&data.light, new_light(ft_strdup("P"), new_vector(2, 1, 0), 0.6, 0));
+	light_add(&data.light, new_light("A", NULL, 0.2, new_color(0, 255, 255)));
+	light_add(&data.light, new_light("P", new_vector(2, 1, 0), 0.6, new_color(255, 255, 255)));
+	light_add(&data.light, new_light("P", new_vector(-2, 1, 3), 0.5, new_color(255, 255, 255)));
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
 	if (!data.win)
 		error(ERROR_WIN);
@@ -180,7 +196,7 @@ int	main(int argc, char **argv)
 	mlx_hook(data.win, 17, 0, close_crest, &data);
 	mlx_key_hook(data.win, key_hook, &data);
 	mlx_loop(data.mlx);
-	ft_lstclear(&data.figs, free);
 	clear_lst_light(&data.light);
+	clear_lst_sph(&data.sph);
 	return (0);
 }
