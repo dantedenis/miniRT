@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/10 17:06:48 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/10 17:12:08 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,4 @@ t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color);
 void	light_add(t_light **light, t_light *new);
 void	clear_lst_light(t_light	**lst);
 
-/*
-**
-*/
-
-t_light	*new_light(char *type, t_vec *pos, float ratio, int color);
-void	light_add(t_light **light, t_light *new);
-void	clear_lst_light(t_light	**lst);
 #endif
