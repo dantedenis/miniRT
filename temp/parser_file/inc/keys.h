@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:42 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/11 18:50:17 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/08 22:54:46 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,5 @@
 # define BUTTON_C 8
 # define BUTTON_PLUS 69
 # define BUTTON_MINUS 78
-# define KEY_5 53
-# define KEY_6 54
 
 #endif

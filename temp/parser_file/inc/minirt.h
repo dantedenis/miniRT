@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/11 22:27:30 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/09 09:32:49 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <math.h>
 # include <stdio.h>
 
-# include "mlx.h"
+//# include "mlx.h"
 # include "libft.h"
 # define FLT_MAX 3.402823e+38
 
@@ -39,9 +39,9 @@ typedef struct s_vec
 
 typedef struct s_color
 {
-	int	r;
-	int	g;
-	int	b;
+	int	x;
+	int	y;
+	int	z;
 }	t_color;
 
 typedef struct s_cam
@@ -56,27 +56,45 @@ typedef struct s_light
 	char			*type;
 	t_vec			*pos;
 	float			l_ratio;
-	t_color			*color;
+	int				color;
 	struct s_light	*next;
 }	t_light;
 
 typedef struct s_sph
 {
-	t_vec			*cntr;
-	float			radius;
-	t_color			*color;
-	struct s_sph	*next;
-	float			t_close;
+	t_vec	cntr;
+	float	radius;
+	t_color	color;
 }	t_sph;
 
 typedef struct s_plane
 {
-	t_vec			*n;
-	float			d;
-	t_color			*color;
-	float			t_close;
-	struct s_plane	*next;
-}	t_plane;
+	t_vec	pos;
+	t_vec	norm;
+	t_color	color;
+}	t_pl;
+
+typedef struct s_cylinder
+{
+	t_vec	pos;
+	t_vec	norm;
+	float	diameter;
+	float	height;
+	t_color	color;
+}	t_cy;
+
+typedef struct s_ambi
+{
+	float	ratio;
+	t_color	color;
+}	t_ambi;
+
+typedef struct s_obj
+{
+	void			*par;
+	char			*key;
+	struct s_obj	*next;
+}	t_obj;
 
 typedef struct s_data
 {
@@ -86,33 +104,23 @@ typedef struct s_data
 	int			w;
 	int			h;	
 	float		whratio;
-	t_vec		*ray;
-	t_sph		*sph;
-	t_plane		*plane;
+	t_list		*figs;
 	t_light		*light;
-	t_cam		cam;
+	t_obj		*obj;
 }	t_data;
 
-/*
-**	COLOR_FUNCTIONS
-*/
-
-int	pcolor_from_struct(t_color *color);
 int	pcolor(int r, int g, int b);
-int	mul_pcolor(t_color *color, t_vec *t);
-t_color	*new_color(int r, int g, int b);
+int	mul_pcolor(int r, int g, int b, float i);
 
 
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
-double	ft_atof(char *str);
+//double	ft_atof(char *str);
 
-int		close_crest(t_data *data);
+int		close_crest(void *param);
 int		key_hook(int button, t_data *data);
 
 void	help(void);
 void	error(char *msg);
-
-void	draw(t_data *data);
 
 /*
 **	VECTOR OPERATIONS
@@ -124,7 +132,6 @@ float	vec_scalar_mul(t_vec *a, t_vec *b);
 float	vec_len(t_vec *a);
 void	vec_norm(t_vec *a);
 t_vec	*vec_sum(t_vec *a, t_vec *b);
-void	vec_sum_inplace(t_vec *a, t_color *b, float k);
 t_vec	*vec_mul_nbr(t_vec *a, float k);
 void	print_vec(t_vec *vec, char *name);
 
@@ -132,19 +139,18 @@ void	print_vec(t_vec *vec, char *name);
 **	FIGURE_INIT
 */
 
-t_sph	*new_sph(t_vec *cntr, float radius, t_color *color);
-void	clear_lst_sph(t_sph	**lst);
-void	sph_add(t_sph **sph, t_sph *new);
-t_plane	*new_plane(t_vec *n, t_vec *coord, t_color *color);
-t_plane	plane_add(t_plane **plane, t_plane *new);
-void	clear_lst_plane(t_plane	**lst);
+int		init_plane(char **lines, t_data *data);
+int		init_cylinder(char **lines, t_data *data);
+int		init_sphere(char **lines, t_data *data);
+int		init_ambient(char **lines, t_data *data);
+int		init_camera(char **lines, t_data *data);
+t_sph	*new_sph(float x, float y, float z, float radius, int color);
 
 /*
-**	LIGHT_FUNCTIONS
+**
 */
 
-t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color);
+t_light	*new_light(char *type, t_vec *pos, float ratio, int color);
 void	light_add(t_light **light, t_light *new);
 void	clear_lst_light(t_light	**lst);
-
 #endif

@@ -1,29 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   keys.h                                             :+:      :+:    :+:   */
+/*   errors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/21 18:14:42 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/11 18:50:17 by lcoreen          ###   ########.fr       */
+/*   Created: 2021/11/21 18:14:25 by lcoreen           #+#    #+#             */
+/*   Updated: 2021/11/22 14:20:05 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef KEYS_H
-# define KEYS_H
-
-# define MOUSE_SCROLL_IN 5
-# define MOUSE_SCROLL_OUT 4
-# define ARROW_UP 126
-# define ARROW_LEFT 123
-# define ARROW_DOWN 125
-# define ARROW_RIGHT 124
-# define ESC 65307
-# define BUTTON_C 8
-# define BUTTON_PLUS 69
-# define BUTTON_MINUS 78
-# define KEY_5 53
-# define KEY_6 54
-
+#ifndef ERRORS_H
+# define ERRORS_H
+# define ERROR_MLX "Error: fail with creating mlx connection\n"
+# define ERROR_WIN "Error: fail with creating window\n"
+# define ERROR_IMG "Error: fail with creating image\n"
+# define ERROR_INIT "Error: fail with passing parameters to program\n"
 #endif

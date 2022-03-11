@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/10 17:05:44 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/11 22:51:57 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,62 @@ t_sph	*trasing(t_data *data, t_vec *o, float t_min, float t_max)
 		{
 			closest_sph = sph;
 			closest_sph->t_close = t1;
+			closest = t1;
 		}
 		if ((t1 > t_min && t1 < t_max) && t2 < closest)
 		{
 			closest_sph = sph;
 			closest_sph->t_close = t2;
+			closest = t2;
 		}
 		sph = sph->next;
 	}
 	return (closest_sph);
+}
+
+float	intersect_plane(t_plane *tmp, t_vec *ray, t_vec *o, float *t2)
+{
+	float	c;
+	float	ret;
+
+	c = vec_scalar_mul(ray, tmp->n);
+	if (c == 0)
+		return (FLT_MAX);
+	ret = (tmp->d - vec_scalar_mul(o, tmp->n)) / c;
+	if (ret < 0)
+		return (FLT_MAX);
+	return (ret);
+}
+
+t_plane	*trasing_plane(t_data *data, t_vec *o, float t_min, float t_max)
+{
+	float	closest;
+	t_plane	*closest_fig;
+	float	t2;
+	float	t1;
+	t_plane	*plane;
+	
+	closest = FLT_MAX;
+	closest_fig = NULL;
+	plane = data->plane;
+	while (plane)
+	{
+		t1 = intersect_plane(plane, data->ray, o, &t2);
+		if ((t1 > t_min && t1 < t_max) && t1 < closest)
+		{
+			closest_fig = plane;
+			closest_fig->t_close = t1;
+			closest = t1;
+		}
+		if ((t1 > t_min && t1 < t_max) && t2 < closest)
+		{
+			closest_fig = plane;
+			closest_fig->t_close = t2;
+			closest = t2;
+		}
+		plane = plane->next;
+	}
+	return (closest_fig);
 }
 
 t_vec	*compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N)
@@ -149,7 +196,8 @@ void	draw(t_data *data)
 		error(ERROR_IMG);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 			&data->img.line_length, &data->img.endian);
-	o = new_vector(0, 0, 0);
+	o = new_vector(0, 0, -2);
+	// o = &data->cam.pos;
 	while (y < data->h)
 	{
 		x = 0;
@@ -163,7 +211,7 @@ void	draw(t_data *data)
 		}
 		++y;
 	}
-	free(o);
+	//free(o);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 	mlx_destroy_image(data->mlx, data->img.img);
 }
@@ -181,9 +229,12 @@ int	main(int argc, char **argv)
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
 	data.sph = NULL;
+	data.plane = NULL;
+	ft_bzero(&data.cam.pos, sizeof(t_vec));/// ADDD
 	sph_add(&data.sph, new_sph(new_vector(0, -1, 3), 1, new_color(255, 0, 0)));
 	sph_add(&data.sph, new_sph(new_vector(-2, 0, 4), 1, new_color(0, 255, 0)));
 	sph_add(&data.sph, new_sph(new_vector(2, 0, 4), 1, new_color(0, 0, 255)));
+	// plane_add(&data.plane, new_plane(new_vector(-0.7, 0, 0.7), new_vector(1.2, 0, 0), new_color(0, 255, 255)));
 	sph_add(&data.sph, new_sph(new_vector(0, -5001, 0), 5000, new_color(255, 255, 0)));
 	data.light = NULL;
 	light_add(&data.light, new_light("A", NULL, 0.2, new_color(0, 255, 255)));
@@ -198,5 +249,6 @@ int	main(int argc, char **argv)
 	mlx_loop(data.mlx);
 	clear_lst_light(&data.light);
 	clear_lst_sph(&data.sph);
+	clear_lst_plane(&data.plane);
 	return (0);
 }
