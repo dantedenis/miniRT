@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 14:29:48 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/10 17:05:53 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/12 17:03:23 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,3 +89,10 @@ void	vec_norm(t_vec *a)
 	a->z /= len;
 }
 
+t_vec	*vec_copy(t_vec *src)
+{
+	t_vec	*ret;
+
+	ret = new_vector(src->x, src->y, src->z);
+	return (ret);
+}

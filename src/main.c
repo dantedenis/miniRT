@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/11 22:51:57 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/12 18:12:01 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2)
 	float	descr;
 	t_vec	*oc;
 
-	oc = vec_sub(o, tmp->cntr);
+	oc = vec_sub(o, &tmp->cntr);
 	k1 = vec_scalar_mul(ray, ray);
 	k2 = 2 * vec_scalar_mul(ray, oc);
 	k3 = vec_scalar_mul(oc, oc) - pow(tmp->radius, 2);
@@ -36,106 +36,79 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2)
 	return ((-k2 + sqrt(descr)) / (2 * k1));
 }
 
-t_sph	*trasing(t_data *data, t_vec *o, float t_min, float t_max)
-{
-	float	closest;
-	t_sph	*closest_sph;
-	float	t2;
-	float	t1;
-	t_sph	*sph;
-	
-	closest = FLT_MAX;
-	closest_sph = NULL;
-	sph = data->sph;
-	while (sph)
-	{
-		t1 = intersect_sphere(sph, data->ray, o, &t2);
-		if ((t1 > t_min && t1 < t_max) && t1 < closest)
-		{
-			closest_sph = sph;
-			closest_sph->t_close = t1;
-			closest = t1;
-		}
-		if ((t1 > t_min && t1 < t_max) && t2 < closest)
-		{
-			closest_sph = sph;
-			closest_sph->t_close = t2;
-			closest = t2;
-		}
-		sph = sph->next;
-	}
-	return (closest_sph);
-}
-
-float	intersect_plane(t_plane *tmp, t_vec *ray, t_vec *o, float *t2)
+float	intersect_plane(t_pl *tmp, t_vec *ray, t_vec *o, float *t2)
 {
 	float	c;
 	float	ret;
 
-	c = vec_scalar_mul(ray, tmp->n);
+	*t2 = FLT_MAX;
+	c = vec_scalar_mul(ray, &tmp->n);
 	if (c == 0)
 		return (FLT_MAX);
-	ret = (tmp->d - vec_scalar_mul(o, tmp->n)) / c;
+	ret = (tmp->d - vec_scalar_mul(o, &tmp->n)) / c;
 	if (ret < 0)
 		return (FLT_MAX);
 	return (ret);
 }
 
-t_plane	*trasing_plane(t_data *data, t_vec *o, float t_min, float t_max)
+t_obj	*trasing(t_data *data, t_vec *o, float t_min, float t_max)
 {
 	float	closest;
-	t_plane	*closest_fig;
+	t_obj	*closest_obj;
 	float	t2;
 	float	t1;
-	t_plane	*plane;
+	t_obj	*obj;
 	
 	closest = FLT_MAX;
-	closest_fig = NULL;
-	plane = data->plane;
-	while (plane)
+	closest_obj = NULL;
+	obj = data->obj;
+	while (obj)
 	{
-		t1 = intersect_plane(plane, data->ray, o, &t2);
+		if (!ft_strncmp(obj->key, "sp", 3))
+			t1 = intersect_sphere((t_sph *) obj->par, data->ray, o, &t2);
+		else if (!ft_strncmp(obj->key, "pl", 3))
+			t1 = intersect_plane((t_pl *) obj->par, data->ray, o, &t2);
 		if ((t1 > t_min && t1 < t_max) && t1 < closest)
 		{
-			closest_fig = plane;
-			closest_fig->t_close = t1;
+			closest_obj = obj;
+			closest_obj->t = t1;
 			closest = t1;
 		}
-		if ((t1 > t_min && t1 < t_max) && t2 < closest)
+		if ((t2 > t_min && t2 < t_max) && t2 < closest)
 		{
-			closest_fig = plane;
-			closest_fig->t_close = t2;
+			closest_obj = obj;
+			closest_obj->t = t2;
 			closest = t2;
 		}
-		plane = plane->next;
+		obj = obj->next;
 	}
-	return (closest_fig);
+	return (closest_obj);
 }
 
 t_vec	*compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N)
 {
 	t_vec	*i;
 	float	L_dot_N;
-	t_sph	*close_sph;
+	t_obj	*close_obj;
 	
 	i = new_vector(0, 0, 0);
 	while (light)
 	{
 		if (!ft_strncmp(light->type, "A", 2))
-			vec_sum_inplace(i, light->color, light->l_ratio);
+			vec_sum_inplace(i, &light->color, light->ratio);
 		else
 		{
 			free(data->ray);
-			data->ray = vec_sub(light->pos, P);
-			close_sph = trasing(data, P, 0.001, 1);
-			if (close_sph)
+			data->ray = vec_sub(&light->pos, P);
+			close_obj = trasing(data, P, 0.001, 1);
+			if (close_obj)
 			{
 				light = light->next;
 				continue ;
 			}
 			L_dot_N = vec_scalar_mul(data->ray, N);
 			if (L_dot_N > 0)
-				vec_sum_inplace(i, light->color, light->l_ratio * L_dot_N / vec_len(data->ray));
+				vec_sum_inplace(i, &light->color, light->ratio * L_dot_N / vec_len(data->ray));
 		}
 		light = light->next;
 	}
@@ -147,21 +120,24 @@ int	get_color(t_data *data, t_vec *o)
 	t_vec	*P;
 	t_vec	*N;
 	t_vec	*closest_ray;
-	t_sph	*closest_sph;
+	t_obj	*closest_fig;
 	int		color;
 
-	closest_sph = trasing(data, o, 1, FLT_MAX);
-	if (closest_sph == NULL)
+	closest_fig = trasing(data, o, 1, FLT_MAX);
+	if (closest_fig == NULL)
 		return (0);
-	closest_ray = vec_mul_nbr(data->ray, closest_sph->t_close);
+	closest_ray = vec_mul_nbr(data->ray, closest_fig->t);
 	P = vec_sum(closest_ray, o);
-	N = vec_sub(P, closest_sph->cntr);
+	if (!ft_strncmp(closest_fig->key, "sp", 3))
+		N = vec_sub(P, &((t_sph *) closest_fig->par)->cntr);
+	else
+		N = vec_copy(&((t_pl *) closest_fig->par)->n);
 	vec_norm(N);
 	free(closest_ray);
 	closest_ray = compute_light(data, data->light, P, N);
 	free(P);
 	free(N);
-	color = mul_pcolor(closest_sph->color, closest_ray);
+	color = mul_pcolor(&closest_fig->color, closest_ray);
 	free(closest_ray);
 	return (color);
 }
@@ -173,7 +149,7 @@ int	ray_trase(t_data *data, t_vec *o, int x, int y)
 	int		color;
 	
 	(void) o;
-	sc_x = (float) x / data->w;
+	sc_x = tan(data->cam.fov * M_PI / 360) * x / data->w;
 	sc_y = data->whratio * y / data->h;
 	data->ray = new_vector(sc_x, sc_y, 1);
 	color = get_color(data, o);
@@ -196,8 +172,7 @@ void	draw(t_data *data)
 		error(ERROR_IMG);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 			&data->img.line_length, &data->img.endian);
-	o = new_vector(0, 0, -2);
-	// o = &data->cam.pos;
+	o = &data->cam.pos;
 	while (y < data->h)
 	{
 		x = 0;
@@ -211,7 +186,6 @@ void	draw(t_data *data)
 		}
 		++y;
 	}
-	//free(o);
 	mlx_put_image_to_window(data->mlx, data->win, data->img.img, 0, 0);
 	mlx_destroy_image(data->mlx, data->img.img);
 }
@@ -222,24 +196,31 @@ int	main(int argc, char **argv)
 
 	(void) argv;
 	(void) argc;
+	ft_bzero(&data, sizeof(t_data));
 	data.mlx = mlx_init();
 	if (!data.mlx)
 		error(ERROR_MLX);
-	data.w = 800;
-	data.h = 600;
+	data.w = 1920;
+	data.h = 1080;
 	data.whratio = (float) data.h / data.w;
-	data.sph = NULL;
-	data.plane = NULL;
-	ft_bzero(&data.cam.pos, sizeof(t_vec));/// ADDD
-	sph_add(&data.sph, new_sph(new_vector(0, -1, 3), 1, new_color(255, 0, 0)));
-	sph_add(&data.sph, new_sph(new_vector(-2, 0, 4), 1, new_color(0, 255, 0)));
-	sph_add(&data.sph, new_sph(new_vector(2, 0, 4), 1, new_color(0, 0, 255)));
-	// plane_add(&data.plane, new_plane(new_vector(-0.7, 0, 0.7), new_vector(1.2, 0, 0), new_color(0, 255, 255)));
-	sph_add(&data.sph, new_sph(new_vector(0, -5001, 0), 5000, new_color(255, 255, 0)));
-	data.light = NULL;
-	light_add(&data.light, new_light("A", NULL, 0.2, new_color(0, 255, 255)));
-	light_add(&data.light, new_light("P", new_vector(2, 1, 0), 0.6, new_color(255, 255, 255)));
-	light_add(&data.light, new_light("P", new_vector(-2, 1, 3), 0.5, new_color(255, 255, 255)));
+	parser("C 0.0,0.0,-50.0 0,0,1 90", &data);
+	parser("A 0.2 255,255,255", &data);
+	parser("L 0.0,50.0,50.0 1 255,255,255", &data);
+	parser("sp 0.0,0.0,100.0  30 255,0,10", &data);
+	parser("sp 0,20.0,150.0  20.0 10,0,255", &data);
+	parser("sp 30,20,90 20.0 10,255,0", &data);
+	parser("pl 0.0,-50,0.0 0,1,0 124,124,140", &data);
+	// TODO (bstrong): Парсер файла через гнл шоб не париться с изменением параметров в мейнике)
+	// TODO (lcoreen): Добавить обработку цилиндра
+	// CHANGES: Поменял структуры сферы и плоскости, все общие поля вынес в obj (color, параметр t)
+	// 			В структурах остаются только их геометрические параметры
+	//			Лист объектов хранит только объекты фигур и их параметры
+	//			Лист света (data.light) хранит свет в виде одного типа t_light (для определения типа света используется data.light->type)
+	//			Камера в структуре расположена тоже отдельным полем (data.cam)
+	//			Изменения в структуре data немного коснулись функций list_obj.c (не сильно :))
+	// =======> TODO: Добавить структуру цилиндра шоб она в себе хранила ток нужные геомертрические параметры
+	// TODO: Реализовать вращение и перемещение по остальным осям (приорирет пока низкий)
+	// TODO: Реализовать зеркальное отражение (бонус)
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
 	if (!data.win)
 		error(ERROR_WIN);
@@ -248,7 +229,6 @@ int	main(int argc, char **argv)
 	mlx_key_hook(data.win, key_hook, &data);
 	mlx_loop(data.mlx);
 	clear_lst_light(&data.light);
-	clear_lst_sph(&data.sph);
-	clear_lst_plane(&data.plane);
+	free_list_obj(&data.obj);
 	return (0);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
+#    By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/09 18:33:56 by bstrong          ###   ########.fr        #
+#    Updated: 2022/03/12 12:45:46 by lcoreen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ INCLUDE	= -I ./includes -I ./libft -I ./minilibx
 
 LIBS	= -L./libft -lft -L./minilibx -lmlx
 
-HEADERS	= ./includes/minirt.h
+HEADERS	= ./includes/minirt.h	./includes/keys.h 
 
 VPATH := ./src/
 
@@ -26,7 +26,8 @@ SRC_PATH	=	./src/
 
 SRC_LST		=	main.c		init_figure.c	key_hooks.c\
 				message.c	pixel_draw.c	vector_operations.c\
-				utils.c		colors.c		lights.c
+				utils.c		colors.c		lights.c\
+				list_obj.c	parser.c
 
 OBJ_PATH		=	./bin/
 
