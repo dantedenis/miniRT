@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/13 21:08:11 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/13 21:44:15 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,8 @@ void	help(void);
 void	error(char *msg);
 
 void	draw(t_data *data);
-int	parser(char *str, t_data *data);
+int		parser(char *str, t_data *data);
+int		reader_file(char *file, t_data *data);
 
 /*
 **	VECTOR OPERATIONS

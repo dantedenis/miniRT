@@ -24,3 +24,24 @@ int	parser(char *str, t_data *data)
 	free_arr(&lines);
 	return (0);
 }
+
+int	reader_file(char *file, t_data *data)
+{
+	int		fd;
+	char	*temp;
+
+	fd = open(file, O_RDONLY);
+	if (fd > 0 && data)
+	{
+		while (1)
+		{
+			temp = get_next_line(fd);
+			if (!temp)
+				break ;
+			parser(temp, data);
+			free(temp);
+		}
+		return (close(fd));
+	}
+	return (1);
+}

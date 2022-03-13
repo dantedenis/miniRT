@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/13 21:35:59 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/13 21:44:05 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	(void) argv;
+	//(void) argv;
 	(void) argc;
 	ft_bzero(&data, sizeof(t_data));
 	data.mlx = mlx_init();
@@ -244,6 +244,8 @@ int	main(int argc, char **argv)
 	data.w = 400;
 	data.h = 300;
 	data.whratio = (float) data.h / data.w;
+	reader_file(argv[1], &data);
+	/*
 	parser("C 0.0,0.0,-50.0 0,0,1 90", &data);
 	parser("A 0.2 255,255,255", &data);
 	parser("L 0.0,50.0,50.0 1 255,255,255", &data);

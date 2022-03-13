@@ -10,35 +10,41 @@ SRC		=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c\
 			ft_toupper.c	ft_memcpy.c		ft_strtrim.c\
 			ft_strjoin.c	ft_substr.c		ft_split.c\
 			ft_itoa.c		ft_strmapi.c	ft_striteri.c\
-			ft_putchar_fd.c	ft_putstr_fd.c	ft_putendl_fd.c\
+			ft_putchar_fd.c	ft_putstr_fd.c	ft_putendl_fd.c
 			
 
 SRC_B	=	ft_lstadd_back_bonus.c	ft_lstadd_front_bonus.c	ft_lstclear_bonus.c\
             ft_lstdelone_bonus.c	ft_lstlast_bonus.c		ft_lstnew_bonus.c\
-            ft_lstsize_bonus.c		ft_lstiter_bonus.c		ft_lstmap_bonus.c
+            ft_lstsize_bonus.c		ft_lstiter_bonus.c		ft_lstmap_bonus.c\
+			get_next_line.c
+
+DIR_BIN	=	./bin/
 
 HEADER	= 	libft.h
-OBJ		=	${SRC:%.c=%.o}
-OBJ_B	=	${SRC_B:%.c=%.o}
+OBJ		=	${SRC:%.c=$(DIR_BIN)%.o}
+OBJ_B	=	${SRC_B:%.c=$(DIR_BIN)%.o}
 
 CC		=	clang
-CFLAGS	=	-Wall -Wextra -Werror -I.
+CFLAGS	=	-Wall -Wextra -Werror -I. -g
 
 .PHONY	:	all clean fclean re bonus
 
-all		:	${NAME}
+all		:	$(DIR_BIN) ${NAME}
 
-${NAME}	:	${OBJ} ${HEADER}
+$(DIR_BIN):
+	mkdir -p $(DIR_BIN)
+
+${NAME}	:	${OBJ} ${OBJ_B} ${HEADER}
 	ar -rcs ${NAME} $?
 
-%.o : %.c ${HEADER}
+$(DIR_BIN)%.o : %.c ${HEADER}
 	${CC} ${CFLAGS} -c $< -o $@
 
 bonus	:
 	make OBJ="${OBJ_B}" all
 
 clean	:
-	rm -f ${OBJ} ${OBJ_B}
+	rm -rf ${DIR_BIN}
 
 fclean	:	clean
 	rm -f ${NAME}
