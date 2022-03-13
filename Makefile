@@ -6,7 +6,7 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/13 20:03:00 by bstrong          ###   ########.fr        #
+#    Updated: 2022/03/13 20:18:58 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ OBJ				=	$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
 all	:	$(LIBS) $(OBJ_PATH) $(NAME)
 
 $(LIBS)	:
-		make -C ./libft all bonus
+		make -C ./libft all
 		$ make -C ./minilibx
 
 $(OBJ_PATH)	:

@@ -34,7 +34,7 @@ all		:	$(DIR_BIN) ${NAME}
 $(DIR_BIN):
 	mkdir -p $(DIR_BIN)
 
-${NAME}	:	${OBJ} ${HEADER}
+${NAME}	:	${OBJ} ${OBJ_B} ${HEADER}
 	ar -rcs ${NAME} $?
 
 $(DIR_BIN)%.o : %.c ${HEADER}
