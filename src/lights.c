@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/09 00:12:15 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 14:09:53 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/13 21:05:40 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,16 @@ void	clear_lst_light(t_light	**lst)
 	while (begin)
 	{
 		next = begin->next;
-		// free(begin->type);
+		free(begin->type);
 		free(begin);
 		begin = next;
 	}
 	*lst = 0;
+}
+
+void	add_intensity(t_vec *a, t_color *b, float k)
+{
+	a->x += k * b->r / 255;
+	a->y += k * b->g / 255;
+	a->z += k * b->b / 255;
 }

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 14:01:36 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/13 19:57:20 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	free_list_obj(t_obj **lst)
 	{
 		next = tmp->next;
 		free(tmp->key);
+		free(tmp->par);
 		free(tmp);
 		tmp = next;
 	}

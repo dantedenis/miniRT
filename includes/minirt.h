@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 17:04:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/13 21:08:11 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ typedef struct s_pl
 	float			d;
 }	t_pl;
 
+typedef struct s_cy
+{
+	t_vec	pos;
+	t_vec	norm;
+	float	diameter;
+	float	height;
+}	t_cy;
+
 typedef struct s_obj
 {
 	void			*par;
@@ -89,7 +97,7 @@ typedef struct s_data
 	int			w;
 	int			h;	
 	float		whratio;
-	t_vec		*ray;
+	t_vec		ray;
 	t_obj		*obj;
 	t_light		*light;
 	t_cam		cam;
@@ -123,16 +131,15 @@ int	parser(char *str, t_data *data);
 **	VECTOR OPERATIONS
 */
 
-t_vec	*new_vector(float x, float y, float z);
-t_vec	*vec_sub(t_vec *a, t_vec *b);
+t_vec	new_vector(float x, float y, float z);
+t_vec	vec_mul_nbr(t_vec *a, float k);
+t_vec	vec_sum(t_vec *a, t_vec *b);
+t_vec	vec_sub(t_vec *a, t_vec *b);
 float	vec_scalar_mul(t_vec *a, t_vec *b);
 float	vec_len(t_vec *a);
 void	vec_norm(t_vec *a);
-t_vec	*vec_sum(t_vec *a, t_vec *b);
-void	vec_sum_inplace(t_vec *a, t_color *b, float k);
-t_vec	*vec_mul_nbr(t_vec *a, float k);
-void	print_vec(t_vec *vec, char *name);
-t_vec	*vec_copy(t_vec *src);
+t_vec	vec_copy(t_vec *src);
+t_vec	vec_mul(t_vec *a, t_vec *b);
 
 /*
 **	FIGURE_INIT
@@ -159,5 +166,6 @@ int		init_light(char **lines, t_data *data);
 t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color);
 void	light_add(t_light **light, t_light *new);
 void	clear_lst_light(t_light	**lst);
+void	add_intensity(t_vec *a, t_color *b, float k);
 
 #endif

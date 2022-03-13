@@ -135,26 +135,29 @@ int	init_plane(char **lines, t_data *data)
 	return (0);
 }
 
-// int	init_cylinder(char **lines, t_data *data)
-// {
-// 	t_obj	*new_obj;
-// 	t_vec	pos;
-// 	t_vec	norm;
-// 	t_color	color;
+int	init_cylinder(char **lines, t_data *data)
+{
+	t_obj	*new_obj;
+	t_vec	pos;
+	t_vec	norm;
+	t_color	color;
 
-// 	new_obj = (t_obj *) malloc(sizeof(t_obj));
-// 	if (!new_obj)
-// 		return (1);
-// 	new_obj->par = malloc(sizeof(t_cy));
-// 	if (!new_obj->par) //TODO: clear allocation upper
-// 		return (1);
-// 	new_obj->key = ft_strdup(lines[0]);
-// 	pos = get_vector(lines[1]);
-// 	norm = get_vector(lines[2]);
-// 	color = get_color(lines[5]);
-// 	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]), ft_atof(lines[4]), color}), sizeof(t_cy));
-// 	ft_put(data, new_obj);
-// 	//printf("%s %f %f %f %f %d,%d,%d\n", new_obj->key,((t_sph *)new_obj->par)->cntr.x, ((t_sph *)new_obj->par)->cntr.y, ((t_sph *)new_obj->par)->cntr.z, ((t_sph *)new_obj->par)->radius, ((t_sph *)new_obj->par)->color.x, ((t_sph *)new_obj->par)->color.y, ((t_sph *)new_obj->par)->color.z);
-// 	free(lines); ///////----->TODO: frea array;
-// 	return (0);
-// }
+	new_obj = (t_obj *) ft_calloc(1, sizeof(t_obj));
+	if (!new_obj)
+		return (1);
+	new_obj->par = malloc(sizeof(t_cy));
+	if (!new_obj->par)
+	{
+		free(new_obj);
+		return (1);
+	}
+	new_obj->key = ft_strdup(lines[0]);
+	new_obj->next = NULL;
+	pos = get_vector(lines[1]);
+	norm = get_vector(lines[2]);
+	color = get_color(lines[5]);
+	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]), ft_atof(lines[4])}), sizeof(t_cy));
+	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
+	ft_put(data, new_obj);
+	return (0);
+}

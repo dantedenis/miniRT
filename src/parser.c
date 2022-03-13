@@ -12,8 +12,8 @@ static int init_obj(char **lines, t_data *data)
 		return (init_sphere(lines, data));
 	if (!ft_strncmp(*lines, "PL", 3) || !ft_strncmp(*lines, "pl", 3))
 		return (init_plane(lines, data));
-	// if (!ft_strncmp(*lines, "CY", 3) || !ft_strncmp(*lines, "cy", 3))
-	// 	return (init_cylinder(lines, data));
+	if (!ft_strncmp(*lines, "CY", 3) || !ft_strncmp(*lines, "cy", 3))
+		return (init_cylinder(lines, data));
 	return (1);
 }
 
