@@ -21,8 +21,8 @@ HEADER	= 	libft.h
 OBJ		=	${SRC:%.c=%.o}
 OBJ_B	=	${SRC_B:%.c=%.o}
 
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -I${HEADER}
+CC		=	clang
+CFLAGS	=	-Wall -Wextra -Werror -I.
 
 .PHONY	:	all clean fclean re bonus
 
