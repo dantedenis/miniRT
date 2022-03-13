@@ -17,28 +17,33 @@ SRC_B	=	ft_lstadd_back_bonus.c	ft_lstadd_front_bonus.c	ft_lstclear_bonus.c\
             ft_lstdelone_bonus.c	ft_lstlast_bonus.c		ft_lstnew_bonus.c\
             ft_lstsize_bonus.c		ft_lstiter_bonus.c		ft_lstmap_bonus.c
 
-HEADER	= 	libft.h
-OBJ		=	${SRC:%.c=%.o}
-OBJ_B	=	${SRC_B:%.c=%.o}
+DIR_BIN	=	./bin/
 
-CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -I${HEADER}
+HEADER	= 	libft.h
+OBJ		=	${SRC:%.c=$(DIR_BIN)%.o}
+OBJ_B	=	${SRC_B:%.c=$(DIR_BIN)%.o}
+
+CC		=	clang
+CFLAGS	=	-Wall -Wextra -Werror -I${HEADER} -g
 
 .PHONY	:	all clean fclean re bonus
 
-all		:	${NAME}
+all		:	$(DIR_BIN) ${NAME}
+
+$(DIR_BIN):
+	mkdir -p $(DIR_BIN)
 
 ${NAME}	:	${OBJ} ${HEADER}
 	ar -rcs ${NAME} $?
 
-%.o : %.c ${HEADER}
+$(DIR_BIN)%.o : %.c ${HEADER}
 	${CC} ${CFLAGS} -c $< -o $@
 
 bonus	:
 	make OBJ="${OBJ_B}" all
 
 clean	:
-	rm -f ${OBJ} ${OBJ_B}
+	rm -rf ${DIR_BIN}
 
 fclean	:	clean
 	rm -f ${NAME}

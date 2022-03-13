@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 17:04:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/12 23:40:13 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ void	help(void);
 void	error(char *msg);
 
 void	draw(t_data *data);
-int	parser(char *str, t_data *data);
+int		parser(char *str, t_data *data);
+int		reader_file(char *file, t_data *data);
 
 /*
 **	VECTOR OPERATIONS

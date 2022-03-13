@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 18:12:01 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/12 23:46:06 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,22 +194,25 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	(void) argv;
+	//(void) argv;
 	(void) argc;
 	ft_bzero(&data, sizeof(t_data));
 	data.mlx = mlx_init();
 	if (!data.mlx)
 		error(ERROR_MLX);
-	data.w = 1920;
-	data.h = 1080;
+	data.w = 320;
+	data.h = 240;
 	data.whratio = (float) data.h / data.w;
+	reader_file(argv[1], &data);
+	/*
 	parser("C 0.0,0.0,-50.0 0,0,1 90", &data);
 	parser("A 0.2 255,255,255", &data);
 	parser("L 0.0,50.0,50.0 1 255,255,255", &data);
 	parser("sp 0.0,0.0,100.0  30 255,0,10", &data);
 	parser("sp 0,20.0,150.0  20.0 10,0,255", &data);
 	parser("sp 30,20,90 20.0 10,255,0", &data);
-	parser("pl 0.0,-50,0.0 0,1,0 124,124,140", &data);
+	parser("pl 0.0,-50,0.0 0,1,0 100,120,140", &data);
+	*/
 	// TODO (bstrong): Парсер файла через гнл шоб не париться с изменением параметров в мейнике)
 	// TODO (lcoreen): Добавить обработку цилиндра
 	// CHANGES: Поменял структуры сферы и плоскости, все общие поля вынес в obj (color, параметр t)
