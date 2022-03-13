@@ -1,5 +1,4 @@
 #include "minirt.h"
-#include "get_next_line.h"
 
 static int init_obj(char **lines, t_data *data)
 {

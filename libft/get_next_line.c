@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
-char	*ft_strdup_gnl(char *s, char *del)
+static char	*ft_strdup_gnl(char *s, char *del)
 {
 	size_t	size;
 	char	*dest;
@@ -30,7 +30,7 @@ char	*ft_strdup_gnl(char *s, char *del)
 	return (dest);
 }
 
-char	*ft_strjoin_gnl(char *s1, char *s2)
+static char	*ft_strjoin_gnl(char *s1, char *s2)
 {
 	char	*result;
 	size_t	len1;
@@ -49,7 +49,7 @@ char	*ft_strjoin_gnl(char *s1, char *s2)
 	return (result);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+static char	*ft_substr_gnl(char const *s, unsigned int start, size_t len)
 {
 	char	*result;
 	size_t	len_str;
@@ -69,7 +69,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (result);
 }
 
-int	read_data(int fd, char **sym_nl, char **s_left_str)
+static int	read_data(int fd, char **sym_nl, char **s_left_str)
 {
 	int		rd;
 	char	*buf;
@@ -113,7 +113,7 @@ char	*get_next_line(int fd)
 		s_left_str = NULL;
 		return (result);
 	}
-	result = ft_substr(s_left_str, 0, sym_nl - s_left_str + 1);
+	result = ft_substr_gnl(s_left_str, 0, sym_nl - s_left_str + 1);
 	s_left_str = ft_strdup_gnl(sym_nl + 1, s_left_str);
 	return (result);
 }
