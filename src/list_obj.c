@@ -46,14 +46,19 @@ int	init_camera(char **lines, t_data *data)
 	t_vec	pos;
 	t_vec	norm;
 	float	fov;
+	t_vec	up;
+	t_vec	right;
 
 	pos = get_vector(lines[1]);
 	norm = get_vector(lines[2]);
+	vec_norm(&norm);
 	fov = ft_atof(lines[3]);
-	ft_memcpy(&data->cam, &((t_cam){pos, norm, fov}), sizeof(t_cam));
+	up = new_vector(0, 1, 0);
+	right = vec_mul(&up, &norm);
+	up = vec_mul(&norm, &right);
+	ft_memcpy(&data->cam, &((t_cam){pos, norm, fov, up, right}), sizeof(t_cam));
 	return (0);
 }
-
 
 int	init_light(char **lines, t_data *data)
 {

@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/14 17:51:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/14 22:12:32 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct s_cam
 	t_vec	pos;
 	t_vec	orient;
 	float	fov;
+	t_vec	up;
+	t_vec	right;
 }	t_cam;
 
 typedef struct s_light

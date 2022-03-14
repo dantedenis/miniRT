@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/14 18:08:56 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/14 22:58:16 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,10 +233,15 @@ int	ray_trase(t_data *data, t_vec *o, int x, int y)
 	float	sc_x;
 	float	sc_y;
 	int		color;
+	t_vec	u;
+	t_vec	v;
 	
 	sc_x = tan(data->cam.fov * M_PI / 360) * x / data->w;
 	sc_y = data->whratio * y / data->h;
-	data->ray = new_vector(sc_x, sc_y, 1);
+	u = vec_mul_nbr(&data->cam.right, sc_x);
+	v = vec_mul_nbr(&data->cam.up, sc_y);
+	data->ray = vec_sum(&u, &v);
+	data->ray = vec_sum(&data->ray, &data->cam.orient);
 	color = get_color(data, o);
 	return (color);
 }
@@ -287,13 +292,17 @@ int	main(int argc, char **argv)
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
 	reader_file(argv[1], &data);
-	// TODO (lcoreen): Добавить обработку цилиндра
 	// CHANGES: Поменял структуры сферы и плоскости, все общие поля вынес в obj (color, параметр t)
 	// 			В структурах остаются только их геометрические параметры
 	//			Лист объектов хранит только объекты фигур и их параметры
 	//			Лист света (data.light) хранит свет в виде одного типа t_light (для определения типа света используется data.light->type)
 	//			Камера в структуре расположена тоже отдельным полем (data.cam)
 	//			Изменения в структуре data немного коснулись функций list_obj.c (не сильно :))
+	// TODO (from subject):
+	// 	• Your program must be able to resize the object’s unique properties: diameter for a
+	// sphere and the width and height for a cylinder.
+	// • Your program must be able to apply translation and rotation transformation to
+	// objects, lights and cameras (except for spheres and lights that cannot be rotated).
 	// TODO: Реализовать вращение и перемещение по остальным осям (приорирет пока низкий)
 	// TODO: Реализовать зеркальное отражение (бонус)
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
