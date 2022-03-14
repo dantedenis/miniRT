@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/13 21:44:15 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/14 17:51:00 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ typedef struct s_sph
 typedef struct s_pl
 {
 	t_vec			n;
-	float			d;
+	t_vec			c;
 }	t_pl;
 
 typedef struct s_cy
@@ -78,6 +78,7 @@ typedef struct s_cy
 	t_vec	norm;
 	float	diameter;
 	float	height;
+	int		part;
 }	t_cy;
 
 typedef struct s_obj
@@ -141,6 +142,7 @@ float	vec_len(t_vec *a);
 void	vec_norm(t_vec *a);
 t_vec	vec_copy(t_vec *src);
 t_vec	vec_mul(t_vec *a, t_vec *b);
+void	print_vec(t_vec *vec, char *name);
 
 /*
 **	FIGURE_INIT

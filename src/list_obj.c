@@ -126,9 +126,9 @@ int	init_plane(char **lines, t_data *data)
 	new_obj->next = NULL;
 	coord = get_vector(lines[1]);
 	norm = get_vector(lines[2]);
-	d = vec_scalar_mul(&coord, &norm);
+	vec_norm(&norm);
 	color = get_color(lines[3]);
-	ft_memcpy(new_obj->par, &((t_pl){norm, d}), sizeof(t_pl));
+	ft_memcpy(new_obj->par, &((t_pl){norm, coord}), sizeof(t_pl));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
 	//printf("%s %f %f %f %f %d,%d,%d\n", new_obj->key,((t_sph *)new_obj->par)->cntr.x, ((t_sph *)new_obj->par)->cntr.y, ((t_sph *)new_obj->par)->cntr.z, ((t_sph *)new_obj->par)->radius, ((t_sph *)new_obj->par)->color.x, ((t_sph *)new_obj->par)->color.y, ((t_sph *)new_obj->par)->color.z);
@@ -155,8 +155,9 @@ int	init_cylinder(char **lines, t_data *data)
 	new_obj->next = NULL;
 	pos = get_vector(lines[1]);
 	norm = get_vector(lines[2]);
+	vec_norm(&norm);
 	color = get_color(lines[5]);
-	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]), ft_atof(lines[4])}), sizeof(t_cy));
+	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]), ft_atof(lines[4]), 0}), sizeof(t_cy));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
 	return (0);

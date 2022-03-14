@@ -6,35 +6,52 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/13 21:48:18 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/14 18:08:56 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 #include "errors.h"
 
-
 float	intersect_plane(t_pl *tmp, t_vec *ray, t_vec *o, float *t2)
 {
 	float	c;
 	float	ret;
+	t_vec	oc;
 
 	if (t2)
 		*t2 = FLT_MAX;
 	c = vec_scalar_mul(ray, &tmp->n);
+	oc = vec_sub(o, &tmp->c);
 	if (c == 0)
 		return (FLT_MAX);
-	ret = (tmp->d - vec_scalar_mul(o, &tmp->n)) / c;
+	ret = -vec_scalar_mul(&oc, &tmp->n) / c;
 	if (ret < 0)
 		return (FLT_MAX);
 	return (ret);
 }
 
+t_vec	get_cy_norm(t_cy *cy, t_vec *ray, t_vec *o, float t)
+{
+	t_vec	oc;
+	t_vec	tmp;
+	if (!cy->part)
+	{
+		oc = vec_sub(o, &cy->pos);
+		tmp = vec_mul_nbr(&cy->norm, vec_scalar_mul(ray, &cy->norm));
+		tmp = vec_sub(ray, &tmp);
+		tmp = vec_mul_nbr(&tmp, t);
+		tmp = vec_sum(&tmp, &oc);
+		oc = vec_mul_nbr(&cy->norm, vec_scalar_mul(&oc, &cy->norm));
+		tmp = vec_sub(&tmp, &oc);
+		return (tmp);
+	}
+	else
+		return (vec_mul_nbr(&cy->norm, cy->part));
+}
+
 float	intersect_cylinder(t_cy *tmp, t_vec *ray, t_vec *o, float *t2)
 {
-	t_vec	v;
-	t_vec	u;
-	t_vec	n;
 	t_vec	oc;
 	float	a;
 	float	b;
@@ -42,34 +59,60 @@ float	intersect_cylinder(t_cy *tmp, t_vec *ray, t_vec *o, float *t2)
 	float	descr;
 	float	t1;
 	float	t;
+	float	m;
+	t_vec	pc;
 	t_pl	plane;
 
-	v = vec_mul_nbr(&tmp->norm, vec_scalar_mul(&tmp->norm, ray));
-	v = vec_sub(ray, &v);
+	tmp->part = 0;
 	oc = vec_sub(o, &tmp->pos);
-	u = vec_mul_nbr(&tmp->norm, vec_scalar_mul(&oc, &tmp->norm));
-	u = vec_sub(&oc, &u);
-	a = vec_scalar_mul(&v, &v);
-	b = 2 * vec_scalar_mul(&v, &u);
-	c = vec_scalar_mul(&u, &u) - (pow(tmp->diameter / 2, 2));
+	a = vec_scalar_mul(ray, ray) - pow(vec_scalar_mul(ray, &tmp->norm), 2);
+	b = 2 * (vec_scalar_mul(ray, &oc) - vec_scalar_mul(ray, &tmp->norm)*vec_scalar_mul(&oc, &tmp->norm));
+	c = vec_scalar_mul(&oc, &oc) - pow(vec_scalar_mul(&oc, &tmp->norm), 2) - (pow(tmp->diameter / 2, 2));
 	descr = pow(b, 2) - 4 * a * c;
 	if (descr < 0)
+	{
+		*t2 = FLT_MAX;
 		return (FLT_MAX);
+	}
 	t1 = (-b + sqrt(descr)) / (2 * a);
 	*t2 = (-b - sqrt(descr)) / (2 * a);
-	plane.d = vec_scalar_mul(&tmp->pos, &tmp->norm) + tmp->height
-			* vec_scalar_mul(&tmp->norm, &tmp->norm) / 2;
-	plane.n = tmp->norm;
-	t = intersect_plane(&plane, ray, o, NULL);
-	if (t > tmp->height / 2)
-		t1 = t;
-	n = vec_mul_nbr(&tmp->norm, -1);
-	plane.d = vec_scalar_mul(&tmp->pos, &n) + tmp->height
-			* vec_scalar_mul(&n, &n) / 2;
-	plane.n = n;
-	t = intersect_plane(&plane, ray, o, NULL);
-	if (t > tmp->height / 2)
-		t1 = t;
+	t = t1;
+	if (*t2 > 0 && *t2 < t1)
+		t = *t2;
+	m = vec_scalar_mul(&oc, &tmp->norm) + t * vec_scalar_mul(ray, &tmp->norm);
+	if (m <= 0 || m >= tmp->height)
+	{
+		t1 = FLT_MAX;
+		plane.c = tmp->pos;
+		plane.n = vec_mul_nbr(&tmp->norm, -1);
+		t = intersect_plane(&plane, ray, o, t2);
+		if (t < FLT_MAX)
+		{
+			pc = vec_mul_nbr(ray, t);
+			pc = vec_sum(&pc, o);
+			pc = vec_sub(&pc, &plane.c);
+			if (vec_len(&pc) <= tmp->diameter / 2)
+			{
+				tmp->part = -1;
+				t1 = t;
+			}
+		}
+		plane.c = vec_mul_nbr(&tmp->norm, tmp->height);
+		plane.c = vec_sum(&tmp->pos, &plane.c);
+		plane.n = tmp->norm;
+		t = intersect_plane(&plane, ray, o, t2);
+		if (t < FLT_MAX)
+		{
+			pc = vec_mul_nbr(ray, t);
+			pc = vec_sum(&pc, o);
+			pc = vec_sub(&pc, &plane.c);
+			if (vec_len(&pc) <= tmp->diameter / 2)
+			{
+				tmp->part = 1;
+				t1 = t;
+			}
+		}
+	}
 	return (t1);
 }
 
@@ -168,15 +211,15 @@ int	get_color(t_data *data, t_vec *o)
 	t_obj	*closest_fig;
 	int		color;
 
-	closest_fig = trasing(data, o, 0.1, FLT_MAX);
+	closest_fig = trasing(data, o, 1, FLT_MAX);
 	if (closest_fig == NULL)
 		return (0);
-	if (!ft_strncmp(closest_fig->key, "cy", 3))
-		return (pcolor_from_struct(&closest_fig->color));
 	closest_ray = vec_mul_nbr(&data->ray, closest_fig->t);
 	P = vec_sum(&closest_ray, o);
 	if (!ft_strncmp(closest_fig->key, "sp", 3))
 		N = vec_sub(&P, &((t_sph *) closest_fig->par)->cntr);
+	else if (!ft_strncmp(closest_fig->key, "cy", 3))
+		N = get_cy_norm((t_cy *) closest_fig->par, &data->ray, o, closest_fig->t);
 	else
 		N = vec_copy(&((t_pl *) closest_fig->par)->n);
 	vec_norm(&N);
@@ -240,11 +283,10 @@ int	main(int argc, char **argv)
 	data.mlx = mlx_init();
 	if (!data.mlx)
 		error(ERROR_MLX);
-	data.w = 400;
-	data.h = 300;
+	data.w = 800;
+	data.h = 600;
 	data.whratio = (float) data.h / data.w;
 	reader_file(argv[1], &data);
-	// TODO (bstrong): Парсер файла через гнл шоб не париться с изменением параметров в мейнике)
 	// TODO (lcoreen): Добавить обработку цилиндра
 	// CHANGES: Поменял структуры сферы и плоскости, все общие поля вынес в obj (color, параметр t)
 	// 			В структурах остаются только их геометрические параметры
@@ -252,7 +294,6 @@ int	main(int argc, char **argv)
 	//			Лист света (data.light) хранит свет в виде одного типа t_light (для определения типа света используется data.light->type)
 	//			Камера в структуре расположена тоже отдельным полем (data.cam)
 	//			Изменения в структуре data немного коснулись функций list_obj.c (не сильно :))
-	// =======> TODO: Добавить структуру цилиндра шоб она в себе хранила ток нужные геомертрические параметры
 	// TODO: Реализовать вращение и перемещение по остальным осям (приорирет пока низкий)
 	// TODO: Реализовать зеркальное отражение (бонус)
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
