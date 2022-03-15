@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_obj.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/15 16:10:52 by lcoreen           #+#    #+#             */
+/*   Updated: 2022/03/15 16:10:52 by lcoreen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 #include <unistd.h>
 
@@ -18,7 +30,7 @@ void	ft_put(t_data *data, t_obj *obj)
 static t_color	get_color(char *line)
 {
 	t_color		rgb;
-	char	**temp;
+	char		**temp;
 
 	temp = ft_split(line, ',');
 	rgb = (t_color){ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2])};
@@ -53,7 +65,10 @@ int	init_camera(char **lines, t_data *data)
 	norm = get_vector(lines[2]);
 	vec_norm(&norm);
 	fov = ft_atof(lines[3]);
-	up = new_vector(0, 1, 0);
+	if (norm.y != 1)
+		up = new_vector(0, 1, 0);
+	else
+		up = new_vector(1, 0, 0);
 	right = vec_mul(&up, &norm);
 	up = vec_mul(&norm, &right);
 	ft_memcpy(&data->cam, &((t_cam){pos, norm, fov, up, right}), sizeof(t_cam));
@@ -136,7 +151,6 @@ int	init_plane(char **lines, t_data *data)
 	ft_memcpy(new_obj->par, &((t_pl){norm, coord}), sizeof(t_pl));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
-	//printf("%s %f %f %f %f %d,%d,%d\n", new_obj->key,((t_sph *)new_obj->par)->cntr.x, ((t_sph *)new_obj->par)->cntr.y, ((t_sph *)new_obj->par)->cntr.z, ((t_sph *)new_obj->par)->radius, ((t_sph *)new_obj->par)->color.x, ((t_sph *)new_obj->par)->color.y, ((t_sph *)new_obj->par)->color.z);
 	return (0);
 }
 
@@ -162,7 +176,8 @@ int	init_cylinder(char **lines, t_data *data)
 	norm = get_vector(lines[2]);
 	vec_norm(&norm);
 	color = get_color(lines[5]);
-	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]), ft_atof(lines[4]), 0}), sizeof(t_cy));
+	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]),
+			ft_atof(lines[4]), 0}), sizeof(t_cy));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
 	return (0);

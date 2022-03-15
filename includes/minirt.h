@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/14 22:12:32 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:01:18 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,8 @@ t_color	*new_color(int r, int g, int b);
 
 
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
+void	create_image(t_data *data);
+
 double	ft_atof(char *str);
 void	free_arr(char ***arr);
 void	free_list_obj(t_obj **lst);
@@ -128,8 +130,16 @@ void	help(void);
 void	error(char *msg);
 
 void	draw(t_data *data);
+t_obj	*trasing(t_data *data, t_vec *o, float t_min, float t_max);
+int	ray_trase(t_data *data, t_vec *o, int x, int y);
+t_vec	compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N);
 int		parser(char *str, t_data *data);
 int		reader_file(char *file, t_data *data);
+
+t_vec	get_cy_norm(t_cy *cy, t_vec *ray, t_vec *o, float t);
+float	intersect_cylinder(t_cy *tmp, t_vec *ray, t_vec *o, float *t2);
+float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2);
+float	intersect_plane(t_pl *tmp, t_vec *ray, t_vec *o, float *t2);
 
 /*
 **	VECTOR OPERATIONS
@@ -171,6 +181,5 @@ int		init_light(char **lines, t_data *data);
 t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color);
 void	light_add(t_light **light, t_light *new);
 void	clear_lst_light(t_light	**lst);
-void	add_intensity(t_vec *a, t_color *b, float k);
 
 #endif

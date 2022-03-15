@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/13 19:57:20 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:25:26 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,7 @@ void	free_list_obj(t_obj **lst)
 int	close_crest(t_data *data)
 {
 	mlx_destroy_window(data->mlx, data->win);
-	// clear_lst_sph(&data->sph);
 	clear_lst_light(&data->light);
-	// clear_lst_plane(&data->plane);
 	free_list_obj(&data->obj);
 	exit(0);
 }
