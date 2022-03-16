@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/15 17:03:58 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/16 20:28:24 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ int	main(int argc, char **argv)
 	ft_bzero(&data, sizeof(t_data));
 	data.mlx = mlx_init();
 	if (!data.mlx)
-		error(ERROR_MLX);
+		error(ERROR_MLX, NULL, -1);
 	data.w = 800;
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
 	reader_file(argv[1], &data);
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
 	if (!data.win)
-		error(ERROR_WIN);
+		error(ERROR_WIN, NULL, -1);
 	draw(&data);
 	mlx_hook(data.win, 17, 0, close_crest, &data);
 	mlx_key_hook(data.win, key_hook, &data);

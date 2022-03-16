@@ -6,7 +6,7 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/13 20:18:58 by bstrong          ###   ########.fr        #
+#    Updated: 2022/03/16 20:32:04 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,8 @@ VPATH := ./src/
 
 SRC_PATH	=	./src/
 
-SRC_LST		=	main.c		init_figure.c	key_hooks.c\
-				message.c	pixel_draw.c	vector_operations.c\
+SRC_LST		=	main.c			key_hooks.c\
+				message.c	vector_operations.c\
 				utils.c		colors.c		lights.c\
 				list_obj.c	parser.c
 

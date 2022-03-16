@@ -3,44 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/15 17:25:26 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/16 22:02:10 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "minirt.h"
-
-double	ft_atof(char *str)
-{
-	int		sign;
-	double	res;
-	int		deg;
-
-	sign = 1;
-	res = 0;
-	deg = 0;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign *= -1;
-		++str;
-	}
-	while (*str >= '0' && *str <= '9')
-		res = res * 10 + *str++ - '0';
-	if (*str++ == '.')
-	{
-		while (*str >= '0' && *str <= '9')
-		{
-			res = res * 10 + *str - '0';
-			++str;
-			++deg;
-		}
-	}
-	return (res * sign / pow(10, deg));
-}
 
 void	free_arr(char ***arr)
 {
@@ -81,4 +51,11 @@ int	close_crest(t_data *data)
 	clear_lst_light(&data->light);
 	free_list_obj(&data->obj);
 	exit(0);
+}
+
+void	error(char *msg, t_data *data, int line)
+{
+	(void) msg;
+	(void)data;
+	(void) line;
 }
