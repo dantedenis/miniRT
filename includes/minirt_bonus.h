@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minirt.h                                           :+:      :+:    :+:   */
+/*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 11:52:54 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/18 17:15:04 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINIRT_H
-# define MINIRT_H
+#ifndef MINIRT_BONUS_H
+# define MINIRT_BONUS_H
 
 # include <stdlib.h>
 # include <math.h>
@@ -83,12 +83,23 @@ typedef struct s_cy
 	int		part;
 }	t_cy;
 
+typedef struct s_co
+{
+	t_vec	pos;
+	t_vec	norm;
+	float	k;
+	float	height;
+	int		part;
+}	t_co;
+
 typedef struct s_obj
 {
 	void			*par;
 	char			*key;
 	float			t;
 	t_color			color;
+	float			spec;
+	float			refl;
 	struct s_obj	*next;
 }	t_obj;
 
@@ -100,6 +111,8 @@ typedef struct s_data
 	int			w;
 	int			h;	
 	float		whratio;
+	float		depth;
+	t_obj		*clst_obj;
 	t_vec		ray;
 	t_obj		*obj;
 	t_light		*light;
@@ -110,35 +123,43 @@ typedef struct s_data
 **	COLOR_FUNCTIONS
 */
 
-int		pcolor_from_struct(t_color *color);
-int		pcolor(int r, int g, int b);
-int		mul_pcolor(t_color *color, t_vec *t);
-t_color	*new_color(int r, int g, int b);
+int		pcolor(t_color *color);
+t_color	color_mul_vec(t_color *color, t_vec *t);
+t_color	new_color(int r, int g, int b);
+t_color	color_sum(t_color *a, t_color *b);
+void	color_mul_nbr(t_color *color, float t);
 
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 void	create_image(t_data *data);
 
 double	ft_atof(char *str);
-void	free_arr(char ***arr);
-void	free_list_obj(t_obj **lst);
-
-int		close_crest(t_data *data);
+void	free_arr(char ***data);
 int		key_hook(int button, t_data *data);
+void	free_list_obj(t_obj **lst);
+int		close_crest(t_data *data);
 
 void	help(void);
 void	error(char *msg);
 
 void	draw(t_data *data);
+t_vec	reflect_ray(t_vec *N, t_vec *ray);
 t_obj	*trasing(t_data *data, t_vec *o, float t_min, float t_max);
 int		ray_trase(t_data *data, t_vec *o, int x, int y);
 t_vec	compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N);
 int		parser(char *str, t_data *data);
 int		reader_file(char *file, t_data *data);
 
-t_vec	get_cy_norm(t_cy *cy, t_vec *ray, t_vec *o, float t);
+t_vec	get_norm(t_data *data, t_vec *o, t_vec *p);
 float	intersect_cylinder(t_cy *tmp, t_vec *ray, t_vec *o, float *t2);
 float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2);
 float	intersect_plane(t_pl *tmp, t_vec *ray, t_vec *o, float *t2);
+float	intersect_cone(t_co *tmp, t_vec *ray, t_vec *o, float *t2);
+
+
+t_color	spherical_map(t_sph *fig, t_vec *p);
+t_color	planar_map(t_pl *fig, t_vec *p);
+t_color	cylinder_map(t_cy *fig, t_vec *p);
+t_color	checkerboard(t_pl *fig, t_vec *ray);
 
 /*
 **	VECTOR OPERATIONS
@@ -172,6 +193,7 @@ int		init_sphere(char **lines, t_data *data);
 int		init_ambient(char **lines, t_data *data);
 int		init_camera(char **lines, t_data *data);
 int		init_light(char **lines, t_data *data);
+int		init_cone(char **lines, t_data *data);
 
 /*
 **	LIGHT_FUNCTIONS

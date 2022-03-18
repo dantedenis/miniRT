@@ -1,0 +1,63 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/15 16:13:18 by lcoreen           #+#    #+#             */
+/*   Updated: 2022/03/15 16:13:18 by lcoreen          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt_bonus.h"
+
+static int	init_obj(char **lines, t_data *data)
+{
+	if (!ft_strncmp(lines[0], "A", 2))
+		return (init_light(lines, data));
+	if (!ft_strncmp(lines[0], "C", 2) || !ft_strncmp(lines[0], "c", 2))
+		return (init_camera(lines, data));
+	if (!ft_strncmp(*lines, "L", 2) || !ft_strncmp(*lines, "l", 2))
+		return (init_light(lines, data));
+	if (!ft_strncmp(*lines, "sp", 3))
+		return (init_sphere(lines, data));
+	if (!ft_strncmp(*lines, "pl", 3))
+		return (init_plane(lines, data));
+	if (!ft_strncmp(*lines, "cy", 3))
+		return (init_cylinder(lines, data));
+	if (!ft_strncmp(*lines, "co", 3))
+		return (init_cone(lines, data));
+	return (1);
+}
+
+int	parser(char *str, t_data *data)
+{
+	char	**lines;
+
+	lines = ft_split(str, ' ');
+	init_obj(lines, data);
+	free_arr(&lines);
+	return (0);
+}
+
+int	reader_file(char *file, t_data *data)
+{
+	int		fd;
+	char	*temp;
+
+	fd = open(file, O_RDONLY);
+	if (fd > 0 && data)
+	{
+		while (1)
+		{
+			temp = get_next_line(fd);
+			if (!temp)
+				break ;
+			parser(temp, data);
+			free(temp);
+		}
+		return (close(fd));
+	}
+	return (1);
+}

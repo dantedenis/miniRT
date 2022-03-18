@@ -6,31 +6,11 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:38:32 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 11:57:51 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/18 15:56:28 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
-
-t_vec	get_cy_norm(t_cy *cy, t_vec *ray, t_vec *o, float t)
-{
-	t_vec	oc;
-	t_vec	tmp;
-
-	if (!cy->part)
-	{
-		oc = vec_sub(o, &cy->pos);
-		tmp = vec_mul_nbr(&cy->norm, vec_scalar_mul(ray, &cy->norm));
-		tmp = vec_sub(ray, &tmp);
-		tmp = vec_mul_nbr(&tmp, t);
-		tmp = vec_sum(&tmp, &oc);
-		oc = vec_mul_nbr(&cy->norm, vec_scalar_mul(&oc, &cy->norm));
-		tmp = vec_sub(&tmp, &oc);
-		return (tmp);
-	}
-	else
-		return (vec_mul_nbr(&cy->norm, cy->part));
-}
+#include "minirt_bonus.h"
 
 static float	solve_cy(t_cy *tmp, t_vec *ray, t_vec *o, float *t2)
 {
