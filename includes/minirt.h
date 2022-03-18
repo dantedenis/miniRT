@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 11:52:54 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/18 17:24:55 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ t_color	*new_color(int r, int g, int b);
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 void	create_image(t_data *data);
 
-double	ft_atof(char *str);
 void	free_arr(char ***arr);
 void	free_list_obj(t_obj **lst);
 
@@ -126,13 +125,13 @@ int		close_crest(t_data *data);
 int		key_hook(int button, t_data *data);
 
 void	help(void);
-void	error(char *msg);
+//void	error(char *msg);
 
 void	draw(t_data *data);
 t_obj	*trasing(t_data *data, t_vec *o, float t_min, float t_max);
 int		ray_trase(t_data *data, t_vec *o, int x, int y);
 t_vec	compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N);
-int		parser(char *str, t_data *data);
+//int		parser(char *str, t_data *data);
 int		reader_file(char *file, t_data *data);
 
 t_vec	get_cy_norm(t_cy *cy, t_vec *ray, t_vec *o, float t);
@@ -166,12 +165,12 @@ void	print_vec(t_vec *vec, char *name);
 // void	plane_add(t_plane **plane, t_plane *new);
 // void	clear_lst_plane(t_plane	**lst);
 
-int		init_plane(char **lines, t_data *data);
-int		init_cylinder(char **lines, t_data *data);
-int		init_sphere(char **lines, t_data *data);
-int		init_ambient(char **lines, t_data *data);
-int		init_camera(char **lines, t_data *data);
-int		init_light(char **lines, t_data *data);
+int		init_plane(char **lines, t_data *data, int line);
+int		init_cylinder(char **lines, t_data *data, int line);
+int		init_sphere(char **lines, t_data *data, int line);
+int		init_ambient(char **lines, t_data *data, int line);
+int		init_camera(char **lines, t_data *data, int line);
+int		init_light(char **lines, t_data *data, int line);
 
 /*
 **	LIGHT_FUNCTIONS
@@ -180,5 +179,6 @@ int		init_light(char **lines, t_data *data);
 t_light	*new_light(char *type, t_vec *pos, float ratio, t_color *color);
 void	light_add(t_light **light, t_light *new);
 void	clear_lst_light(t_light	**lst);
+void	error(char *msg, t_data *data, int line);
 
 #endif
