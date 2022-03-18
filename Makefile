@@ -1,62 +1,71 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/10/20 12:42:26 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/16 20:32:04 by bstrong          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME	= minirt
-CC		= clang
-FLAGS	= -Wall -Wextra -Werror -g
+CC		= gcc
+FLAGS	= -Wall -Wextra -Wextra -O3 -g
+LIBS	= -L./libft -lft
+INC		= -I ./includes -I ./libft
 
-INCLUDE	= -I ./includes -I ./libft -I ./minilibx
+VPATH	= ./src
+PROGRESS = progress
 
-LIBS	= -L./libft -lft -L./minilibx -lmlx
+ifndef U_OS
+	U_OS = $(shell uname -s)
+	ifeq ($(U_OS), Darwin)
+		LIBS	+=	-L./minilibx -lmlx
+		INC		+= -I ./minilibx
+	endif
+	ifeq ($(U_OS), Linux)
+		LIBS	+= -L./minilibx_linux -lmlx
+		INC		+= -I ./minilibx_linux
+	endif
+endif
 
-HEADERS	= ./includes/minirt.h	./includes/keys.h 
+ifdef ECHO
+	HIT_TOTAL = $(words $(SRC_LST) minirt)
+	HIT_COUNT = $(eval HIT_N != expr $(HIT_N) + 1) $(HIT_N)
+	ECHO =	echo c $(HIT_COUNT) t$(HIT_TOTAL) $@
+endif
 
-VPATH := ./src/
 
-SRC_PATH	=	./src/
+SRC_LST		= $(notdir $(wildcard ./src/*.c))
+HEADERS		= $(wildcard ./inc/*.h)
 
-SRC_LST		=	main.c			key_hooks.c\
-				message.c	vector_operations.c\
-				utils.c		colors.c		lights.c\
-				list_obj.c	parser.c
+OBJ_PATH	=./bin/
+OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
 
-OBJ_PATH		=	./bin/
+.PHONY:		all clean fclean re check
+.SILENT:	$(OBJ) $(OBJ_PATH) $(NAME) all clean fclean re check
 
-OBJ				=	$(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
+all: $(OBJ_PATH) $(NAME)
 
-.PHONY	:	all clean fclean re bonus
-
-all	:	$(LIBS) $(OBJ_PATH) $(NAME)
-
-$(LIBS)	:
+$(LIBS):
 		make -C ./libft all
-		$ make -C ./minilibx
+		make -C ./minilibx
 
-$(OBJ_PATH)	:
-		mkdir -p $(OBJ_PATH)
+$(PROGRESS):
+	g++ main_pr.cpp -o $@
 
-$(NAME) : $(OBJ)
-		$(CC) $(OBJ) $(LIBS) -framework OpenGL -framework AppKit -o $@
+$(OBJ_PATH):
+	echo $(INC)
+	echo "Create $(OBJ_PATH)"
+	mkdir -p $(OBJ_PATH)
 
-$(OBJ_PATH)%.o : %.c $(HEADERS)
-		$(CC) $(FLAGS) $(INCLUDE) -c $< -o $@
+$(NAME): $(OBJ_PATH) $(OBJ)
+	$(ECHO)
+	$(CC) $(OBJ) $(LIBS) -framework OpenGL -framework AppKit -o $@
+
+$(OBJ_PATH)%.o : %.c $(HEADERS) $(LIBS)
+	$(ECHO)
+	$(CC) $(FLAGS) $(INC) -c $< -o $@
 
 clean :
+	echo "Delete ./bin/"
 	make -C ./libft clean
 	make -C ./minilibx clean
 	rm -rf $(OBJ_PATH)
 
 fclean : clean
+	echo "Delete $(NAME)"
 	make -C ./libft fclean
-	rm -f $(NAME)
+	rm -f $(NAME) $(PROGRESS)
 
-re :fclean all
+re : fclean all
