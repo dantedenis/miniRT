@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt_bonus.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/21 12:10:44 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 20:37:46 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,9 @@ typedef struct s_cam
 	float	fov;
 	t_vec	up;
 	t_vec	right;
+	float	alpha;
+	float	betta;
+	float	gamma;
 }	t_cam;
 
 typedef struct s_light
@@ -113,6 +116,7 @@ typedef struct s_data
 	int			h;	
 	float		whratio;
 	float		depth;
+	char		**name_cfg;
 	t_obj		*clst_obj;
 	t_vec		ray;
 	t_obj		*obj;
@@ -133,21 +137,20 @@ void	color_mul_nbr(t_color *color, float t);
 void	my_mlx_pixel_put(t_img *data, int x, int y, int color);
 void	create_image(t_data *data);
 
-// double	ft_atof(char *str);
 void	free_arr(char ***data);
 int		key_hook(int button, t_data *data);
 void	free_list_obj(t_obj **lst);
 int		close_crest(t_data *data);
 
 void	help(void);
-void	error(char *msg);
+void	error(char *msg, t_data *data, int line);
 
 void	draw(t_data *data);
 t_vec	reflect_ray(t_vec *N, t_vec *ray);
 t_obj	*trasing(t_data *data, t_vec *o, float t_min, float t_max);
 int		ray_trase(t_data *data, t_vec *o, int x, int y);
 t_vec	compute_light(t_data *data, t_light *light, t_vec *P, t_vec *N);
-int		parser(char *str, t_data *data);
+//int		parser(char *str, t_data *data);
 int		reader_file(char *file, t_data *data);
 
 t_vec	get_norm(t_data *data, t_vec *o, t_vec *p);
@@ -184,13 +187,14 @@ void	print_vec(t_vec *vec, char *name);
 // void	plane_add(t_plane **plane, t_plane *new);
 // void	clear_lst_plane(t_plane	**lst);
 
-int		init_plane(char **lines, t_data *data);
-int		init_cylinder(char **lines, t_data *data);
-int		init_sphere(char **lines, t_data *data);
-int		init_ambient(char **lines, t_data *data);
-int		init_camera(char **lines, t_data *data);
-int		init_light(char **lines, t_data *data);
-int		init_cone(char **lines, t_data *data);
+
+void		init_plane(char **lines, t_data *data, int line);
+void		init_cylinder(char **lines, t_data *data, int line);
+void		init_sphere(char **lines, t_data *data, int line);
+void		init_ambient(char **lines, t_data *data, int line);
+void		init_camera(char **lines, t_data *data, int line);
+void		init_light(char **lines, t_data *data, int line);
+void		init_cone(char **lines, t_data *data, int line);
 
 /*
 **	LIGHT_FUNCTIONS

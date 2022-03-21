@@ -68,7 +68,7 @@ static t_vec	get_vector(char *str, int check, t_data *data, int line)
 	};
 	free_arr(&temp);
 	if (check && (result.x < -1 || result.x > 1 || result.y < -1
-		|| result.y > 1 || result.z < -1 || result.z > 1))
+			|| result.y > 1 || result.z < -1 || result.z > 1))
 		error("error init normilaze vector", data, line);
 	return (result);
 }
@@ -152,7 +152,6 @@ int	init_sphere(char **lines, t_data *data, int line)
 int	init_plane(char **lines, t_data *data, int line)
 {
 	t_obj	*new_obj;
-	//float	d;
 	t_vec	coord;
 	t_vec	norm;
 	t_color	color;
