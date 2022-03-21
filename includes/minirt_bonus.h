@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/21 20:22:42 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/21 20:37:46 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,13 +188,13 @@ void	print_vec(t_vec *vec, char *name);
 // void	clear_lst_plane(t_plane	**lst);
 
 
-int		init_plane(char **lines, t_data *data, int line);
-int		init_cylinder(char **lines, t_data *data, int line);
-int		init_sphere(char **lines, t_data *data, int line);
-int		init_ambient(char **lines, t_data *data, int line);
-int		init_camera(char **lines, t_data *data, int line);
-int		init_light(char **lines, t_data *data, int line);
-int		init_cone(char **lines, t_data *data, int line);
+void		init_plane(char **lines, t_data *data, int line);
+void		init_cylinder(char **lines, t_data *data, int line);
+void		init_sphere(char **lines, t_data *data, int line);
+void		init_ambient(char **lines, t_data *data, int line);
+void		init_camera(char **lines, t_data *data, int line);
+void		init_light(char **lines, t_data *data, int line);
+void		init_cone(char **lines, t_data *data, int line);
 
 /*
 **	LIGHT_FUNCTIONS

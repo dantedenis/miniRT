@@ -15,20 +15,20 @@
 static int	init_obj(char **lines, t_data *data, int line)
 {
 	if (!ft_strncmp(*lines, "A", 2))
-		return (init_light(lines, data, line));
+		init_light(lines, data, line);
 	if (!ft_strncmp(*lines, "C", 2) || !ft_strncmp(*lines, "c", 2))
-		return (init_camera(lines, data, line));
+		init_camera(lines, data, line);
 	if (!ft_strncmp(*lines, "L", 2) || !ft_strncmp(*lines, "l", 2))
-		return (init_light(lines, data, line));
+		init_light(lines, data, line);
 	if (!ft_strncmp(*lines, "sp", 3))
-		return (init_sphere(lines, data, line));
+		init_sphere(lines, data, line);
 	if (!ft_strncmp(*lines, "pl", 3))
-		return (init_plane(lines, data, line));
+		init_plane(lines, data, line);
 	if (!ft_strncmp(*lines, "cy", 3))
-		return (init_cylinder(lines, data, line));
+		init_cylinder(lines, data, line);
 	if (!ft_strncmp(*lines, "co", 3))
-		return (init_cone(lines, data, line));
-	return (1);
+		init_cone(lines, data, line);
+	return (0);
 }
 
 static void	prepare_str(char *str)
