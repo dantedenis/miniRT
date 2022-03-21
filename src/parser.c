@@ -41,10 +41,11 @@ static void	prepare_str(char *str)
 
 static int	parser(char *str, t_data *data, int line)
 {
-	int	result;
+	int		result;
+	char	**strings;
 
 	prepare_str(str);
-	char **strings = ft_split(str, ' ');
+	strings = ft_split(str, ' ');
 	result = init_obj(strings, data, line);
 	free_arr(&strings);
 	return (result);

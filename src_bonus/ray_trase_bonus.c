@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:35:28 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/18 17:16:47 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 10:16:19 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,17 @@
 
 static t_color	get_color(t_data *data, t_vec *o, float t_min, float t_max);
 
-static t_color	ray_effects(t_data *data, t_vec *p, t_vec *n)
+static t_color	ray_effects(t_data *data, t_vec *p, t_vec *n, t_vec *o)
 {
 	t_vec	l;
+	t_color	color;
 
 	l = compute_light(data, data->light, p, n);
-	return (color_mul_vec(&data->clst_obj->color, &l));
+	if (data->clst_obj->checker)
+		color = checkerboard(data->clst_obj, p, o);
+	else
+		color = data->clst_obj->color;
+	return (color_mul_vec(&color, &l));
 }
 
 static t_color	reflection(t_data *data, t_vec *p, t_color *color)
@@ -48,7 +53,7 @@ static t_color	get_color(t_data *data, t_vec *o, float t_min, float t_max)
 	p = vec_mul_nbr(&data->ray, data->clst_obj->t);
 	p = vec_sum(&p, o);
 	n = get_norm(data, o, &p);
-	color = ray_effects(data, &p, &n);
+	color = ray_effects(data, &p, &n, o);
 	if (data->depth <= 0 || data->clst_obj->refl <= 0)
 		return (color);
 	data->ray = reflect_ray(&n, &d);

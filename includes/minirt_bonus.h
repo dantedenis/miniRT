@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 14:54:23 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/21 20:22:42 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ typedef struct s_obj
 	t_color			color;
 	float			spec;
 	float			refl;
+	int				checker;
 	struct s_obj	*next;
 }	t_obj;
 
@@ -158,11 +159,7 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2);
 float	intersect_plane(t_pl *tmp, t_vec *ray, t_vec *o, float *t2);
 float	intersect_cone(t_co *tmp, t_vec *ray, t_vec *o, float *t2);
 
-
-t_color	spherical_map(t_sph *fig, t_vec *p);
-t_color	planar_map(t_pl *fig, t_vec *p);
-t_color	cylinder_map(t_cy *fig, t_vec *p);
-t_color	checkerboard(t_pl *fig, t_vec *ray);
+t_color	checkerboard(t_obj *fig, t_vec *p, t_vec *o);
 
 /*
 **	VECTOR OPERATIONS

@@ -6,11 +6,12 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/19 23:35:01 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/21 20:25:09 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+#include "errors.h"
 
 void	free_arr(char ***arr)
 {
