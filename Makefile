@@ -1,8 +1,9 @@
 NAME	= minirt
-CC		= gcc
-FLAGS	= -Wall -Wextra -Wextra -O0 -g
+CC		= clang
+FLAGS	= -Wall -Wextra -Wextra -O3 -g
 LIBS	= -L ./libft -lft
 INC		= -I ./includes -I ./libft
+MLX		= ./minilibx
 
 VPATH	= ./src ./src_bonus
 PROGRESS = progress
@@ -18,6 +19,7 @@ ifndef U_OS
 		LIBS	+= -L./minilibx_linux -lmlx
 		SPEC	=  -lXext -lX11 -lm -lz
 		INC		+= -I ./minilibx_linux
+		MLX		= ./minilibx_linux
 	endif
 endif
 
@@ -43,7 +45,7 @@ all:  $(LIBS) $(OBJ_PATH) $(NAME)
 
 $(LIBS):
 		make -C ./libft all
-		make -C ./minilibx
+		make -C ${MLX}
 
 $(PROGRESS):
 	g++ main_pr.cpp -o $@
@@ -72,7 +74,7 @@ $(OBJ_PATH)%_bonus.o : %_bonus.c $(HEADERS)
 clean :
 	echo "Delete ./bin/"
 	make -C ./libft clean
-	make -C ./minilibx clean
+	make -C ${MLX} clean
 	rm -rf $(OBJ_PATH)
 
 fclean : clean
