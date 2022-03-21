@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:35:28 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 19:00:23 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 10:11:51 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static float	intersect_figure(t_obj *obj, t_vec *ray, t_vec *o, float *t2)
 {
 	float	t1;
 
+	t1 = 0.0;
 	if (!ft_strncmp(obj->key, "sp", 3))
 		t1 = intersect_sphere((t_sph *) obj->par, ray, o, t2);
 	else if (!ft_strncmp(obj->key, "pl", 3))
