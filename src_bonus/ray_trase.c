@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:35:28 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 18:21:58 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 10:16:19 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static t_color	ray_effects(t_data *data, t_vec *p, t_vec *n, t_vec *o)
 	t_color	color;
 
 	l = compute_light(data, data->light, p, n);
-	
 	if (data->clst_obj->checker)
 		color = checkerboard(data->clst_obj, p, o);
 	else

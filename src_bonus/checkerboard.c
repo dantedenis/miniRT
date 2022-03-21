@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 21:49:43 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 18:31:45 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 10:16:03 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_color	uv_pattern_at(float u, float v)
 	int	v2;
 
 	u2 = 8 * u;
-	v2 = 8 * v;	
+	v2 = 8 * v;
 	if ((u2 + v2) % 2 == 0)
 		return (new_color(255, 255, 255));
 	else
@@ -60,7 +60,7 @@ static t_color	cylinder_map(t_cy *fig, t_vec *p, t_vec *o)
 	float	u;
 	float	v;
 	float	k;
-	
+
 	pc = vec_sub(o, &fig->pos);
 	k = vec_len(&pc);
 	pc = vec_sub(p, &fig->pos);

@@ -65,7 +65,7 @@ int	init_camera(char **lines, t_data *data)
 	norm = get_vector(lines[2]);
 	vec_norm(&norm);
 	fov = ft_atof(lines[3]);
-	if (norm.y != 1)
+	if (fabs(norm.y) != 1)
 		up = new_vector(0, 1, 0);
 	else
 		up = new_vector(1, 0, 0);

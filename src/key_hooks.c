@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:04 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/14 22:48:20 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 10:16:47 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,5 @@ int	key_hook(int button, t_data *data)
 {
 	if (button == ESC)
 		close_esc(data);
-	// if (button == KEY_5)
-	// 	data->cam.pos.x += 3;
-	// if (button == KEY_6)
-	// 	data->cam.pos.x -= 3;
-	// data->cam.orient.x +=10;
-	// data->cam.fov +=3;
-	// draw(data);
 	return (0);
 }

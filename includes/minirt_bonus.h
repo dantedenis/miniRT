@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 18:22:54 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 12:10:44 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,7 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2);
 float	intersect_plane(t_pl *tmp, t_vec *ray, t_vec *o, float *t2);
 float	intersect_cone(t_co *tmp, t_vec *ray, t_vec *o, float *t2);
 
-t_color checkerboard(t_obj *fig, t_vec *p, t_vec *o);
+t_color	checkerboard(t_obj *fig, t_vec *p, t_vec *o);
 
 /*
 **	VECTOR OPERATIONS
