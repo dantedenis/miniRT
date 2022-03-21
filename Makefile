@@ -28,9 +28,20 @@ ifdef ECHO
 endif
 
 
-SRC_LST		= $(notdir $(wildcard ./src/*.c))
-SRC_LST_B	= $(notdir $(wildcard ./src_bonus/*.c))
-HEADERS		= $(wildcard ./inc/*.h)
+SRC_LST		=	colors.c				compute_light.c		cylinder.c\
+				image.c					key_hooks.c			lights.c\
+				list_obj.c				main.c				message.c\
+				parser.c				plane.c				sphere.c\
+				trasing.c				utils.c				vector_operations.c\
+				vector_operations2.c
+SRC_LST_B	=	checkerboard_bonus.c	colors_bonus.c		compute_light_bonus.c\
+				cone_bonus.c			cylinder_bonus.c	get_norm_bonus.c\
+				image_bonus.c			key_hooks_bonus.c	lights_bonus.c\
+				list_obj_bonus.c		main_bonus.c		message_bonus.c\
+				parser_bonus.c			plane_bonus.c		ray_trase_bonus.c\
+				sphere_bonus.c			trasing_bonus.c		utils_bonus.c\
+				vector_operations_bonus.c		vector_operations2_bonus.c
+HEADERS		= ./includes/errors.h	./includes/keys.h	./includes/minirt_bonus.h	./includes/minirt.h
 
 OBJ_PATH	=./bin/
 OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
