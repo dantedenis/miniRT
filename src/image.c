@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:35 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/15 16:27:30 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/20 18:54:05 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	create_image(t_data *data)
 {
 	data->img.img = mlx_new_image(data->mlx, data->w, data->h);
 	if (!data->img.img)
-		error(ERROR_IMG);
+		error(ERROR_IMG, data, 1);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 			&data->img.line_length, &data->img.endian);
 }

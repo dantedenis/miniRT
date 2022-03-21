@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:38:32 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 11:57:51 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/20 19:51:36 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,7 @@ static float	solve_cy_cap(t_cy *tmp, t_pl *plane, t_vec *ray, t_vec *o)
 		pc = vec_sum(&pc, o);
 		pc = vec_sub(&pc, &plane->c);
 		if (vec_len(&pc) <= tmp->diameter / 2)
-		{
-			tmp->part = -1;
 			return (t);
-		}
 	}
 	return (FLT_MAX);
 }
@@ -84,14 +81,20 @@ static float	solve_cy_caps(t_cy *tmp, t_vec *ray, t_vec *o)
 	plane.c = tmp->pos;
 	plane.n = vec_mul_nbr(&tmp->norm, -1);
 	t = solve_cy_cap(tmp, &plane, ray, o);
-	if (t != FLT_MAX)
+	if (t < FLT_MAX)
+	{
+		tmp->part = -1;
 		return (t);
+	}
 	plane.c = vec_mul_nbr(&tmp->norm, tmp->height);
 	plane.c = vec_sum(&tmp->pos, &plane.c);
 	plane.n = tmp->norm;
 	t = solve_cy_cap(tmp, &plane, ray, o);
-	if (t != FLT_MAX)
+	if (t < FLT_MAX)
+	{
+		tmp->part = 1;
 		return (t);
+	}
 	return (FLT_MAX);
 }
 

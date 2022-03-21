@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 20:28:24 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/20 19:51:47 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ int	main(int argc, char **argv)
 	data.w = 800;
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
-	reader_file(argv[1], &data);
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
 	if (!data.win)
 		error(ERROR_WIN, NULL, -1);
+	reader_file(argv[1], &data);
 	draw(&data);
 	mlx_hook(data.win, 17, 0, close_crest, &data);
 	mlx_key_hook(data.win, key_hook, &data);
@@ -64,16 +64,3 @@ int	main(int argc, char **argv)
 	free_list_obj(&data.obj);
 	return (0);
 }
-// CHANGES: Поменял структуры сферы и плоскости, все общие поля вынес в obj (color, параметр t)
-	// 			В структурах остаются только их геометрические параметры
-	//			Лист объектов хранит только объекты фигур и их параметры
-	//			Лист света (data.light) хранит свет в виде одного типа t_light (для определения типа света используется data.light->type)
-	//			Камера в структуре расположена тоже отдельным полем (data.cam)
-	//			Изменения в структуре data немного коснулись функций list_obj.c (не сильно :))
-	// TODO (from subject):
-	// 	• Your program must be able to resize the object’s unique properties: diameter for a
-	// sphere and the width and height for a cylinder.
-	// • Your program must be able to apply translation and rotation transformation to
-	// objects, lights and cameras (except for spheres and lights that cannot be rotated).
-	// TODO: Реализовать вращение и перемещение по остальным осям (приорирет пока низкий)
-	// TODO: Реализовать зеркальное отражение (бонус)

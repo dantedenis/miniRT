@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:37:33 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/18 17:19:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/18 22:32:35 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_vec	reflect_ray(t_vec *N, t_vec *ray)
 	return (r);
 }
 
-static float	specular(t_data *d, t_vec *N, t_vec *V, float r)
+static float	specular(t_data *d, t_vec *N, t_vec *V, float k)
 {
 	t_vec	r;
 	float	t;
@@ -40,7 +40,7 @@ static float	specular(t_data *d, t_vec *N, t_vec *V, float r)
 		r = reflect_ray(N, &d->ray);
 		t = vec_scalar_mul(&r, V);
 		if (t > 0)
-			ret = r * pow(t / (vec_len(&r) * vec_len(V)), d->clst_obj->spec);
+			ret = k * pow(t / (vec_len(&r) * vec_len(V)), d->clst_obj->spec);
 	}
 	return (ret);
 }

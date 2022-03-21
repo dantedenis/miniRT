@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:24 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 21:45:11 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/20 18:32:25 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ void	help(void)
 
 void	error(char *msg)
 {
-	printf("%s", msg);
+	printf("%s\n", msg);
 	exit(1);
 }

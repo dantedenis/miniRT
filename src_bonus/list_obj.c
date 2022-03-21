@@ -115,12 +115,14 @@ int	init_sphere(char **lines, t_data *data)
 		return (1);
 	}
 	new_obj->key = "sp";
+	new_obj->checker = !ft_strncmp(lines[3], "check", 6);
 	new_obj->spec = ft_atof(lines[4]);
 	new_obj->refl = ft_atof(lines[5]);
 	new_obj->next = NULL;
 	pos = get_vector(lines[1]);
 	diameter = ft_atof(lines[2]);
-	color = get_color(lines[3]);
+	if (!new_obj->checker)
+		color = get_color(lines[3]);
 	ft_memcpy(new_obj->par, &((t_sph){pos, diameter / 2}), sizeof(t_sph));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
@@ -151,7 +153,9 @@ int	init_plane(char **lines, t_data *data)
 	coord = get_vector(lines[1]);
 	norm = get_vector(lines[2]);
 	vec_norm(&norm);
-	color = get_color(lines[3]);
+	new_obj->checker = !ft_strncmp(lines[3], "check", 6);
+	if (!new_obj->checker)
+		color = get_color(lines[3]);
 	ft_memcpy(new_obj->par, &((t_pl){norm, coord}), sizeof(t_pl));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
@@ -180,7 +184,9 @@ int	init_cylinder(char **lines, t_data *data)
 	pos = get_vector(lines[1]);
 	norm = get_vector(lines[2]);
 	vec_norm(&norm);
-	new_obj->color = get_color(lines[5]);
+	new_obj->checker = !ft_strncmp(lines[5], "check", 6);
+	if (!new_obj->checker)
+		new_obj->color = get_color(lines[5]);
 	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]),
 			ft_atof(lines[4]), 0}), sizeof(t_cy));
 	ft_put(data, new_obj);
@@ -209,6 +215,9 @@ int	init_cone(char **lines, t_data *data)
 	pos = get_vector(lines[1]);
 	norm = get_vector(lines[2]);
 	vec_norm(&norm);
+	new_obj->checker = !ft_strncmp(lines[5], "check", 6);
+	if (new_obj->checker)
+		error("Cone havent checkerboard color distribution :(");
 	new_obj->color = get_color(lines[5]);
 	ft_memcpy(new_obj->par, &((t_cy){pos, norm, tan(ft_atof(lines[3]) * M_PI / 180),
 			ft_atof(lines[4]), 0}), sizeof(t_cy));
