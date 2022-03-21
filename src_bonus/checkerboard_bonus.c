@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkerboard.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 21:49:43 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/18 14:17:03 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/19 11:13:31 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_color	planar_map(t_pl *fig, t_vec *p)
 	t_vec	pc;
 	float	u;
 	float	v;
-	float	k;
+	//float	k;
 
 	pc = vec_sub(p, &fig->c);
 	print_vec(&pc, "pc");

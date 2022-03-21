@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   trasing.c                                          :+:      :+:    :+:   */
+/*   trasing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/18 16:12:50 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/18 16:13:22 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/19 13:09:09 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static float	intersect_figure(t_obj *obj, t_vec *ray, t_vec *o, float *t2)
 {
 	float	t1;
 
+	t1 = 0.0;
 	if (!ft_strncmp(obj->key, "sp", 3))
 		t1 = intersect_sphere((t_sph *) obj->par, ray, o, t2);
 	else if (!ft_strncmp(obj->key, "pl", 3))

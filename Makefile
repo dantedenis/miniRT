@@ -1,41 +1,45 @@
 NAME	= minirt
 CC		= gcc
-FLAGS	= -Wall -Wextra -Wextra -O3 -g
-LIBS	= -L./libft -lft
+FLAGS	= -Wall -Wextra -Wextra -O0 -g
+LIBS	= -L ./libft -lft
 INC		= -I ./includes -I ./libft
 
-VPATH	= ./src
+VPATH	= ./src ./src_bonus
 PROGRESS = progress
 
 ifndef U_OS
 	U_OS = $(shell uname -s)
 	ifeq ($(U_OS), Darwin)
-		LIBS	+=	-L./minilibx -lmlx
+		LIBS	+=	-L./minilibx -lmlx 
+		SPEC	= -framework OpenGL -framework AppKit
 		INC		+= -I ./minilibx
 	endif
 	ifeq ($(U_OS), Linux)
 		LIBS	+= -L./minilibx_linux -lmlx
+		SPEC	=  -lXext -lX11 -lm -lz
 		INC		+= -I ./minilibx_linux
 	endif
 endif
 
 ifdef ECHO
 	HIT_TOTAL = $(words $(SRC_LST) minirt)
-	HIT_COUNT = $(eval HIT_N != expr $(HIT_N) + 1) $(HIT_N)
+	HIT_COUNT = $(eval HIT_N != expr $(HIT_N) '+' 1) $(HIT_N)
 	ECHO =	echo c $(HIT_COUNT) t$(HIT_TOTAL) $@
 endif
 
 
 SRC_LST		= $(notdir $(wildcard ./src/*.c))
+SRC_LST_B	= $(notdir $(wildcard ./src_bonus/*.c))
 HEADERS		= $(wildcard ./inc/*.h)
 
 OBJ_PATH	=./bin/
 OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
+OBJ_B		= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_B)))
 
-.PHONY:		all clean fclean re check
-.SILENT:	$(OBJ) $(OBJ_PATH) $(NAME) all clean fclean re check
+.PHONY:		 all bonus clean fclean re bonus
+#.SILENT:	all clean fclean re
 
-all: $(OBJ_PATH) $(NAME)
+all:  $(LIBS) $(OBJ_PATH) $(NAME)
 
 $(LIBS):
 		make -C ./libft all
@@ -45,15 +49,23 @@ $(PROGRESS):
 	g++ main_pr.cpp -o $@
 
 $(OBJ_PATH):
-	echo $(INC)
 	echo "Create $(OBJ_PATH)"
 	mkdir -p $(OBJ_PATH)
 
 $(NAME): $(OBJ_PATH) $(OBJ)
 	$(ECHO)
-	$(CC) $(OBJ) $(LIBS) -framework OpenGL -framework AppKit -o $@
+	$(CC) $(OBJ) $(LIBS) $(SPEC) -o $@
 
-$(OBJ_PATH)%.o : %.c $(HEADERS) $(LIBS)
+
+$(OBJ_PATH)%.o : %.c $(HEADERS)
+	$(ECHO)
+	$(CC) $(FLAGS) $(INC) -c $< -o $@
+
+bonus: $(LIBS) $(OBJ_PATH) $(OBJ_B)
+	$(ECHO)
+	$(CC) $(OBJ_B) $(LIBS) $(SPEC) -o $(NAME)
+
+$(OBJ_PATH)%_bonus.o : %_bonus.c $(HEADERS)
 	$(ECHO)
 	$(CC) $(FLAGS) $(INC) -c $< -o $@
 

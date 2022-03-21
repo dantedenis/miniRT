@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   compute_light.c                                    :+:      :+:    :+:   */
+/*   compute_light_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:37:33 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/18 17:19:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/19 12:56:46 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ t_vec	reflect_ray(t_vec *N, t_vec *ray)
 
 static float	specular(t_data *d, t_vec *N, t_vec *V, float r)
 {
-	t_vec	r;
+	t_vec	rt;
 	float	t;
 	float	ret;
 
 	ret = 0;
 	if (d->clst_obj->spec != -1)
 	{
-		r = reflect_ray(N, &d->ray);
-		t = vec_scalar_mul(&r, V);
+		rt = reflect_ray(N, &d->ray);
+		t = vec_scalar_mul(&rt, V);
 		if (t > 0)
-			ret = r * pow(t / (vec_len(&r) * vec_len(V)), d->clst_obj->spec);
+			ret = r * pow(t / (vec_len(&rt) * vec_len(V)), d->clst_obj->spec);
 	}
 	return (ret);
 }
@@ -60,8 +60,8 @@ static float	diffusion(t_data *data, t_vec *N, float ratio)
 t_vec	compute_light(t_data *d, t_light *l, t_vec *P, t_vec *N)
 {
 	t_vec	i;
-	float	t;
-	t_vec	r;
+	//float	t;
+	//t_vec	r;
 	t_vec	v;
 
 	v = vec_mul_nbr(&d->ray, -1);

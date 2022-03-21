@@ -6,61 +6,39 @@
 #    By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/16 19:54:12 by bstrong           #+#    #+#              #
-#    Updated: 2022/03/16 19:54:13 by bstrong          ###   ########.fr        #
+#    Updated: 2022/03/19 11:22:20 by bstrong          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	libft.a
-
-SRC		=	ft_isalpha.c	ft_isdigit.c	ft_isalnum.c\
-			ft_atoi.c		ft_bzero.c		ft_calloc.c\
-			ft_isascii.c	ft_isprint.c	ft_memchr.c\
-			ft_memcmp.c		ft_memmove.c	ft_memset.c\
-			ft_strchr.c		ft_strdup.c		ft_strlcat.c\
-			ft_strlcpy.c	ft_strlen.c		ft_strncmp.c\
-			ft_strnstr.c	ft_strrchr.c	ft_tolower.c\
-			ft_toupper.c	ft_memcpy.c		ft_strtrim.c\
-			ft_strjoin.c	ft_substr.c		ft_split.c\
-			ft_itoa.c		ft_strmapi.c	ft_striteri.c\
-			ft_putchar_fd.c	ft_putstr_fd.c	ft_putendl_fd.c\
-			ft_isupper.c	ft_atof.c
-
-
-SRC_B	=	ft_lstadd_back_bonus.c	ft_lstadd_front_bonus.c	ft_lstclear_bonus.c\
-			ft_lstdelone_bonus.c	ft_lstlast_bonus.c		ft_lstnew_bonus.c\
-			ft_lstsize_bonus.c		ft_lstiter_bonus.c		ft_lstmap_bonus.c\
-			get_next_line.c
-
-DIR_BIN	=	./bin/
-
-HEADER	= 	libft.h
-OBJ		=	${SRC:%.c=$(DIR_BIN)%.o}
-OBJ_B	=	${SRC_B:%.c=$(DIR_BIN)%.o}
-
 CC		=	clang
-CFLAGS	=	-Wall -Wextra -Werror -I. -g
+CFLAGS	=	-Wall -Wextra -Werror -O3 -g
 
-.PHONY	:	all clean fclean re bonus
+SRC_LST		= $(notdir $(wildcard *.c))
+HEADER	= 	libft.h
 
-all		:	$(DIR_BIN) ${NAME}
+OBJ_PATH	=./bin/
+OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
 
-$(DIR_BIN):
-	mkdir -p $(DIR_BIN)
+.PHONY	:	all clean fclean re
 
-${NAME}	:	${OBJ} ${OBJ_B} ${HEADER}
+all: $(OBJ_PATH) $(NAME)	
+
+$(OBJ_PATH):
+	echo "Create $(OBJ_PATH)"
+	mkdir -p $(OBJ_PATH)
+
+$(NAME): ${OBJ} ${OBJ_B} $(HEADER)
 	ar -rcs ${NAME} $?
 
-$(DIR_BIN)%.o : %.c ${HEADER}
-	${CC} ${CFLAGS} -c $< -o $@
-
-bonus	:
-	make OBJ="${OBJ_B}" all
+$(OBJ_PATH)%.o : %.c $(HEADER)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean	:
-	rm -rf ${DIR_BIN}
+	rm -rf $(OBJ_PATH)
 
-fclean	:	clean
-	rm -f ${NAME}
+fclean :	clean
+	rm -f $(NAME)
 
 re		:	fclean all
 

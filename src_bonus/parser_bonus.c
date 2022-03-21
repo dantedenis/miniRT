@@ -12,49 +12,64 @@
 
 #include "minirt_bonus.h"
 
-static int	init_obj(char **lines, t_data *data)
+static int	init_obj(char **lines, t_data *data, int line)
 {
-	if (!ft_strncmp(lines[0], "A", 2))
-		return (init_light(lines, data));
-	if (!ft_strncmp(lines[0], "C", 2) || !ft_strncmp(lines[0], "c", 2))
-		return (init_camera(lines, data));
+	if (!ft_strncmp(*lines, "A", 2))
+		return (init_light(lines, data, line));
+	if (!ft_strncmp(*lines, "C", 2) || !ft_strncmp(*lines, "c", 2))
+		return (init_camera(lines, data, line));
 	if (!ft_strncmp(*lines, "L", 2) || !ft_strncmp(*lines, "l", 2))
-		return (init_light(lines, data));
+		return (init_light(lines, data, line));
 	if (!ft_strncmp(*lines, "sp", 3))
-		return (init_sphere(lines, data));
+		return (init_sphere(lines, data, line));
 	if (!ft_strncmp(*lines, "pl", 3))
-		return (init_plane(lines, data));
+		return (init_plane(lines, data, line));
 	if (!ft_strncmp(*lines, "cy", 3))
-		return (init_cylinder(lines, data));
+		return (init_cylinder(lines, data, line));
 	if (!ft_strncmp(*lines, "co", 3))
-		return (init_cone(lines, data));
+		return (init_cone(lines, data, line));
 	return (1);
 }
 
-int	parser(char *str, t_data *data)
+static void	prepare_str(char *str)
 {
-	char	**lines;
+	int	i;
 
-	lines = ft_split(str, ' ');
-	init_obj(lines, data);
-	free_arr(&lines);
-	return (0);
+	i = -1;
+	while (str[++i])
+		if (!ft_isprint(str[i]))
+			str[i] = ' ';
+}
+
+static int	parser(char *str, t_data *data, int line)
+{
+	int	result;
+
+	prepare_str(str);
+	char **strings = ft_split(str, ' ');
+	result = init_obj(strings, data, line);
+	free_arr(&strings);
+	return (result);
 }
 
 int	reader_file(char *file, t_data *data)
 {
 	int		fd;
 	char	*temp;
+	int		line;
 
 	fd = open(file, O_RDONLY);
+	data->name_cfg = &file;
 	if (fd > 0 && data)
 	{
+		line = 0;
 		while (1)
 		{
+			++line;
 			temp = get_next_line(fd);
 			if (!temp)
 				break ;
-			parser(temp, data);
+			parser(temp, data, line);
 			free(temp);
 		}
 		return (close(fd));

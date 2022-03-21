@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/16 22:02:10 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:35:01 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,20 @@ void	free_list_obj(t_obj **lst)
 
 int	close_crest(t_data *data)
 {
-	mlx_destroy_window(data->mlx, data->win);
-	clear_lst_light(&data->light);
-	free_list_obj(&data->obj);
+	if (data)
+	{
+		mlx_destroy_window(data->mlx, data->win);
+		clear_lst_light(&data->light);
+		free_list_obj(&data->obj);
+	}
 	exit(0);
 }
 
 void	error(char *msg, t_data *data, int line)
 {
-	(void) msg;
-	(void)data;
-	(void) line;
+	if (line != -1)
+		printf(ERRORS_T, msg, *data->name_cfg, line);
+	else
+		printf("%s\n", msg);
+	close_crest(data);
 }

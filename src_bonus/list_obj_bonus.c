@@ -13,8 +13,33 @@
 #include "minirt_bonus.h"
 #include <unistd.h>
 
+static int	len_arr(char **strings)
+{
+	int	i;
+
+	i = 0;
+	while (*strings++)
+		++i;
+	return (i);
+}
+
+static void	check_dupl(t_data *data, char ch)
+{
+	t_obj	*temp;
+
+	temp = data->obj;
+	while (temp)
+	{
+		if (*temp->key == ch)
+			error("duplicate in config", data, -1);
+		temp = temp->next;
+	}
+}
+
 void	ft_put(t_data *data, t_obj *obj)
 {
+	if (ft_isupper(*obj->key))
+		check_dupl(data, *obj->key);
 	if (data->obj)
 	{
 		obj->next = data->obj;
@@ -27,33 +52,45 @@ void	ft_put(t_data *data, t_obj *obj)
 	}
 }
 
-static t_color	get_color(char *line)
+static t_color	get_color(char *str, t_data *data, int line)
 {
 	t_color		rgb;
+	int			len;
 	char		**temp;
 
-	temp = ft_split(line, ',');
+	temp = ft_split(str, ',');
 	rgb = (t_color){ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2])};
+	len = len_arr(temp);
+	ft_putnbr_fd(1, len);
 	free_arr(&temp);
+	if (rgb.r > 255 || rgb.g > 255 || rgb.b > 255 || len != 3)
+		error("color conflict in config", data, line);
 	return (rgb);
 }
 
-static t_vec	get_vector(char *line)
+static t_vec	get_vector(char *str, int check, t_data *data, int line)
 {
 	t_vec	result;
-	char	**str;
+	int		len;
+	char	**temp;
 
-	str = ft_split(line, ',');
+	temp = ft_split(str, ',');
 	result = (t_vec){
-		ft_atof(str[0]),
-		ft_atof(str[1]),
-		ft_atof(str[2]),
+		ft_atof(temp[0]),
+		ft_atof(temp[1]),
+		ft_atof(temp[2]),
 	};
-	free_arr(&str);
+	len = len_arr(temp);
+	if (len != 3)
+		error("init normilaze vector", data, line);
+	free_arr(&temp);
+	if (check && (result.x < -1 || result.x > 1 || result.y < -1
+		|| result.y > 1 || result.z < -1 || result.z > 1))
+		error("init normilaze vector", data, line);
 	return (result);
 }
 
-int	init_camera(char **lines, t_data *data)
+int	init_camera(char **lines, t_data *data, int line)
 {
 	t_vec	pos;
 	t_vec	norm;
@@ -61,8 +98,10 @@ int	init_camera(char **lines, t_data *data)
 	t_vec	up;
 	t_vec	right;
 
-	pos = get_vector(lines[1]);
-	norm = get_vector(lines[2]);
+	if (len_arr(lines) != 4)
+		error("init camera", data, line);
+	pos = get_vector(lines[1], 0, data, line);
+	norm = get_vector(lines[2], 1, data, line);
 	vec_norm(&norm);
 	fov = ft_atof(lines[3]);
 	if (norm.y != 1)
@@ -71,11 +110,11 @@ int	init_camera(char **lines, t_data *data)
 		up = new_vector(1, 0, 0);
 	right = vec_mul(&up, &norm);
 	up = vec_mul(&norm, &right);
-	ft_memcpy(&data->cam, &((t_cam){pos, norm, fov, up, right}), sizeof(t_cam));
+	ft_memcpy(&data->cam, &((t_cam){pos, norm, fov, up, right, 0.f, 0.f, 0.f}), sizeof(t_cam));
 	return (0);
 }
 
-int	init_light(char **lines, t_data *data)
+int	init_light(char **lines, t_data *data, int line)
 {
 	t_light	*new_obj;
 	t_vec	pos;
@@ -88,17 +127,19 @@ int	init_light(char **lines, t_data *data)
 	new_obj = (t_light *) ft_calloc(1, sizeof(t_light));
 	if (!new_obj)
 		return (1);
-	if (!ft_strncmp(lines[0], "l", 2))
-		pos = get_vector(lines[i++]);
+	if (!ft_strncmp(lines[0], "l", 2) || !ft_strncmp(lines[0], "L", 2))
+		pos = get_vector(lines[i++], 0, data, line);
 	ratio = ft_atof(lines[i]);
-	color = get_color(lines[i + 1]);
+	color = get_color(lines[i + 1], data, line);
+	if (ratio < 0 || ratio > 1)
+		error("init light", data, line);
 	ft_memcpy(new_obj, &((t_light){0, pos, ratio, color, 0}), sizeof(t_light));
 	new_obj->type = ft_strdup(lines[0]);
 	light_add(&data->light, new_obj);
 	return (0);
 }
 
-int	init_sphere(char **lines, t_data *data)
+int	init_sphere(char **lines, t_data *data, int line)
 {
 	t_obj	*new_obj;
 	t_vec	pos;
@@ -118,19 +159,20 @@ int	init_sphere(char **lines, t_data *data)
 	new_obj->spec = ft_atof(lines[4]);
 	new_obj->refl = ft_atof(lines[5]);
 	new_obj->next = NULL;
-	pos = get_vector(lines[1]);
+	pos = get_vector(lines[1], 0, data, line);
 	diameter = ft_atof(lines[2]);
-	color = get_color(lines[3]);
+	color = get_color(lines[3], data, line);
+	if (diameter <= 0)
+		error("init sphere", data, line);
 	ft_memcpy(new_obj->par, &((t_sph){pos, diameter / 2}), sizeof(t_sph));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
 	return (0);
 }
 
-int	init_plane(char **lines, t_data *data)
+int	init_plane(char **lines, t_data *data, int line)
 {
 	t_obj	*new_obj;
-	float	d;
 	t_vec	coord;
 	t_vec	norm;
 	t_color	color;
@@ -148,21 +190,22 @@ int	init_plane(char **lines, t_data *data)
 	new_obj->spec = ft_atof(lines[4]);
 	new_obj->refl = ft_atof(lines[5]);
 	new_obj->next = NULL;
-	coord = get_vector(lines[1]);
-	norm = get_vector(lines[2]);
+	coord = get_vector(lines[1], 0, data, line);
+	norm = get_vector(lines[2], 1, data, line);
 	vec_norm(&norm);
-	color = get_color(lines[3]);
+	color = get_color(lines[3], data, line);
 	ft_memcpy(new_obj->par, &((t_pl){norm, coord}), sizeof(t_pl));
 	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
 	return (0);
 }
 
-int	init_cylinder(char **lines, t_data *data)
+int	init_cylinder(char **lines, t_data *data, int line)
 {
 	t_obj	*new_obj;
 	t_vec	pos;
 	t_vec	norm;
+	t_color	color;
 
 	new_obj = (t_obj *) ft_calloc(1, sizeof(t_obj));
 	if (!new_obj)
@@ -177,17 +220,18 @@ int	init_cylinder(char **lines, t_data *data)
 	new_obj->spec = ft_atof(lines[6]);
 	new_obj->refl = ft_atof(lines[7]);
 	new_obj->next = NULL;
-	pos = get_vector(lines[1]);
-	norm = get_vector(lines[2]);
+	pos = get_vector(lines[1], 0, data, line);
+	norm = get_vector(lines[2], 1, data, line);
 	vec_norm(&norm);
-	new_obj->color = get_color(lines[5]);
+	color = get_color(lines[5], data, line);
 	ft_memcpy(new_obj->par, &((t_cy){pos, norm, ft_atof(lines[3]),
 			ft_atof(lines[4]), 0}), sizeof(t_cy));
+	ft_memcpy(&new_obj->color, &color, sizeof(t_color));
 	ft_put(data, new_obj);
 	return (0);
 }
 
-int	init_cone(char **lines, t_data *data)
+int	init_cone(char **lines, t_data *data, int line)
 {
 	t_obj	*new_obj;
 	t_vec	pos;
@@ -206,10 +250,10 @@ int	init_cone(char **lines, t_data *data)
 	new_obj->spec = ft_atof(lines[6]);
 	new_obj->refl = ft_atof(lines[7]);
 	new_obj->next = NULL;
-	pos = get_vector(lines[1]);
-	norm = get_vector(lines[2]);
+	pos = get_vector(lines[1], 0, data, line);
+	norm = get_vector(lines[2], 1, data, line);
 	vec_norm(&norm);
-	new_obj->color = get_color(lines[5]);
+	new_obj->color = get_color(lines[5], data, line);
 	ft_memcpy(new_obj->par, &((t_cy){pos, norm, tan(ft_atof(lines[3]) * M_PI / 180),
 			ft_atof(lines[4]), 0}), sizeof(t_cy));
 	ft_put(data, new_obj);
