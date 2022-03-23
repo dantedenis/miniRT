@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 19:51:47 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/23 19:48:54 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	(void) argc;
+	if (argc != 2)
+		error(ERROR_ARGS, NULL, -1);
 	ft_bzero(&data, sizeof(t_data));
 	data.mlx = mlx_init();
 	if (!data.mlx)

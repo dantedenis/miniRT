@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:37:33 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/21 20:21:21 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/23 17:40:17 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ static float	diffusion(t_data *data, t_vec *N, float ratio)
 t_vec	compute_light(t_data *d, t_light *l, t_vec *P, t_vec *N)
 {
 	t_vec	i;
-	//float	t;
-	//t_vec	r;
 	t_vec	v;
 
 	v = vec_mul_nbr(&d->ray, -1);

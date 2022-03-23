@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/21 20:27:51 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/23 19:10:41 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,31 @@ int	close_crest(t_data *data)
 	exit(0);
 }
 
-void	error(char *msg, t_data *data, int line)
+void	ft_put(t_data *data, t_obj *obj)
 {
-	if (line != -1)
-		printf(ERRORS_T, msg, *data->name_cfg, line);
+	if (ft_isupper(*obj->key))
+		check_dupl(data, *obj->key);
+	if (data->obj)
+	{
+		obj->next = data->obj;
+		data->obj = obj;
+	}
 	else
-		printf("%s\n", msg);
-	close_crest(data);
+	{
+		data->obj = obj;
+		obj->next = NULL;
+	}
+}
+
+void	check_dupl(t_data *data, char ch)
+{
+	t_obj	*temp;
+
+	temp = data->obj;
+	while (temp)
+	{
+		if (*temp->key == ch)
+			error("duplicate in config", data, -1);
+		temp = temp->next;
+	}
 }

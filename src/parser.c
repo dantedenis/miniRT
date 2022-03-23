@@ -14,19 +14,19 @@
 
 static int	init_obj(char **strings, t_data *data, int line)
 {
-	if (!ft_strncmp(strings[0], "A", 2))
-		return (init_light(strings, data, line));
-	if (!ft_strncmp(strings[0], "C", 2) || !ft_strncmp(strings[0], "c", 2))
-		return (init_camera(strings, data, line));
+	if (!ft_strncmp(*strings, "A", 2))
+		init_light(strings, data, line);
+	if (!ft_strncmp(*strings, "C", 2) || !ft_strncmp(*strings, "c", 2))
+		init_camera(strings, data, line);
 	if (!ft_strncmp(*strings, "L", 2) || !ft_strncmp(*strings, "l", 2))
-		return (init_light(strings, data, line));
+		init_light(strings, data, line);
 	if (!ft_strncmp(*strings, "sp", 3))
-		return (init_sphere(strings, data, line));
+		init_sphere(strings, data, line);
 	if (!ft_strncmp(*strings, "pl", 3))
-		return (init_plane(strings, data, line));
+		init_plane(strings, data, line);
 	if (!ft_strncmp(*strings, "cy", 3))
-		return (init_cylinder(strings, data, line));
-	return (1);
+		init_cylinder(strings, data, line);
+	return (0);
 }
 
 static void	prepare_str(char *str)
@@ -58,6 +58,7 @@ int	reader_file(char *file, t_data *data)
 	int		line;
 
 	fd = open(file, O_RDONLY);
+	data->name_cfg = &file;
 	if (fd > 0 && data)
 	{
 		line = 0;
