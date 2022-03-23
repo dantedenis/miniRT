@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/21 23:11:02 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/23 22:02:39 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	main(int argc, char **argv)
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
 	if (!data.win)
 		error(ERROR_WIN, &data, -1);
-	reader_file(argv[1], &data);
+	if (reader_file(argv[1], &data))
+		error("it is not possible to open the file:", &data, -1);
 	draw(&data);
 	mlx_hook(data.win, 17, 0, close_crest, &data);
 	mlx_hook(data.win, 2, 0, key_hook, &data);
