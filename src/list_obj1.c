@@ -52,7 +52,7 @@ void	init_camera(char **lines, t_data *data, int line)
 	if (len_arr(lines) != 4)
 		error("init camera (parameters)", data, line);
 	data->cam.pos = get_vector_check(lines[1], 0, data, line);
-	data->cam.orient = get_vector_check(lines[2], 0, data, line);
+	data->cam.orient = get_vector_check(lines[2], 1, data, line);
 	vec_norm(&data->cam.orient);
 	data->cam.fov = ft_atof(lines[3]);
 	if (fabs(data->cam.orient.y) != 1)

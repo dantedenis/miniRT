@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_obj2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:37:21 by bstrong           #+#    #+#             */
-/*   Updated: 2022/03/23 19:43:48 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/23 22:04:07 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	init_plane(char **lines, t_data *data, int line)
 		error("allocation mem for plane", data, line);
 	new_obj->key = "pl";
 	((t_pl *)new_obj->par)->c = get_vector_check(lines[1], 0, data, line);
-	((t_pl *)new_obj->par)->n = get_vector_check(lines[2], 0, data, line);
+	((t_pl *)new_obj->par)->n = get_vector_check(lines[2], 1, data, line);
 	new_obj->color = get_color_check(lines[3], data, line);
 	vec_norm(&((t_pl *)new_obj->par)->n);
 	ft_put(data, new_obj);
@@ -68,7 +68,7 @@ void	init_cylinder(char **lines, t_data *data, int line)
 		error("allocation mem for cylinder", data, line);
 	new_obj->key = "cy";
 	((t_cy *)new_obj->par)->pos = get_vector_check(lines[1], 0, data, line);
-	((t_cy *)new_obj->par)->norm = get_vector_check(lines[2], 0, data, line);
+	((t_cy *)new_obj->par)->norm = get_vector_check(lines[2], 1, data, line);
 	((t_cy *)new_obj->par)->diameter = ft_atof(lines[3]);
 	((t_cy *)new_obj->par)->height = ft_atof(lines[4]);
 	if ((((t_cy *)new_obj->par)->diameter <= 0
