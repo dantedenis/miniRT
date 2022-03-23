@@ -19,10 +19,10 @@ t_color	get_color_check(char *str, t_data *data, int line)
 	char		**temp;
 
 	temp = ft_split(str, ',');
+	len = len_arr(temp);
 	if (len != 3)
 		error("color conflict in config", data, line);
 	rgb = (t_color){ft_atoi(temp[0]), ft_atoi(temp[1]), ft_atoi(temp[2])};
-	len = len_arr(temp);
 	free_arr(&temp);
 	if (rgb.r > 255 || rgb.g > 255 || rgb.b > 255)
 		error("color conflict in config", data, line);
@@ -52,7 +52,7 @@ void	init_camera(char **lines, t_data *data, int line)
 	if (len_arr(lines) != 4)
 		error("init camera (parameters)", data, line);
 	data->cam.pos = get_vector_check(lines[1], 0, data, line);
-	data->cam.orient = get_vector_check(lines[2], 0, data, line);
+	data->cam.orient = get_vector_check(lines[2], 1, data, line);
 	vec_norm(&data->cam.orient);
 	data->cam.fov = ft_atof(lines[3]);
 	if (fabs(data->cam.orient.y) != 1)

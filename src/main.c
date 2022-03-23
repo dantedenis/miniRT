@@ -6,7 +6,7 @@
 /*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/23 22:02:08 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/23 22:18:29 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int argc, char **argv)
 	data.mlx = mlx_init();
 	if (!data.mlx)
 		error(ERROR_MLX, NULL, -1);
-	data.w = 800;
+	data.w = 600;
 	data.h = 600;
 	data.whratio = (float) data.h / data.w;
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");

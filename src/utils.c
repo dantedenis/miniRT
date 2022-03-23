@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/23 19:31:39 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/23 21:46:00 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	free_list_obj(t_obj **lst)
 	while (tmp)
 	{
 		next = tmp->next;
-		free(tmp->key);
 		free(tmp->par);
 		free(tmp);
 		tmp = next;
