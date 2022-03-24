@@ -6,41 +6,12 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:41 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 14:01:36 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/23 21:46:00 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "minirt.h"
-
-double	ft_atof(char *str)
-{
-	int		sign;
-	double	res;
-	int		deg;
-
-	sign = 1;
-	res = 0;
-	deg = 0;
-	if (*str == '-' || *str == '+')
-	{
-		if (*str == '-')
-			sign *= -1;
-		++str;
-	}
-	while (*str >= '0' && *str <= '9')
-		res = res * 10 + *str++ - '0';
-	if (*str++ == '.')
-	{
-		while (*str >= '0' && *str <= '9')
-		{
-			res = res * 10 + *str - '0';
-			++str;
-			++deg;
-		}
-	}
-	return (res * sign / pow(10, deg));
-}
+#include "errors.h"
 
 void	free_arr(char ***arr)
 {
@@ -67,7 +38,7 @@ void	free_list_obj(t_obj **lst)
 	while (tmp)
 	{
 		next = tmp->next;
-		free(tmp->key);
+		free(tmp->par);
 		free(tmp);
 		tmp = next;
 	}
@@ -76,10 +47,40 @@ void	free_list_obj(t_obj **lst)
 
 int	close_crest(t_data *data)
 {
-	mlx_destroy_window(data->mlx, data->win);
-	// clear_lst_sph(&data->sph);
-	clear_lst_light(&data->light);
-	// clear_lst_plane(&data->plane);
-	free_list_obj(&data->obj);
+	if (data)
+	{
+		mlx_destroy_window(data->mlx, data->win);
+		clear_lst_light(&data->light);
+		free_list_obj(&data->obj);
+	}
 	exit(0);
+}
+
+void	ft_put(t_data *data, t_obj *obj)
+{
+	if (ft_isupper(*obj->key))
+		check_dupl(data, *obj->key);
+	if (data->obj)
+	{
+		obj->next = data->obj;
+		data->obj = obj;
+	}
+	else
+	{
+		data->obj = obj;
+		obj->next = NULL;
+	}
+}
+
+void	check_dupl(t_data *data, char ch)
+{
+	t_obj	*temp;
+
+	temp = data->obj;
+	while (temp)
+	{
+		if (*temp->key == ch)
+			error("duplicate in config", data, -1);
+		temp = temp->next;
+	}
 }

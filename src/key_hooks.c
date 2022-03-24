@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:04 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 17:35:29 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/21 20:18:44 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,5 @@ int	key_hook(int button, t_data *data)
 {
 	if (button == ESC)
 		close_esc(data);
-	if (button == KEY_5)
-		data->cam.pos.x += 0.05;
-	if (button == KEY_6)
-		data->cam.pos.x -= 0.05;
-	draw(data);
 	return (0);
 }
