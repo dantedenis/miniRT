@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 16:38:32 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/20 19:51:36 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/24 11:57:11 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,9 @@ float	intersect_cylinder(t_cy *tmp, t_vec *ray, t_vec *o, float *t2)
 
 	tmp->part = 0;
 	t = solve_cy(tmp, ray, o, t2);
-	if (*t2 > 0 && *t2 < t)
+	if (t == FLT_MAX)
+		return (FLT_MAX);
+	if (*t2 < t)
 		t = *t2;
 	oc = vec_sub(o, &tmp->pos);
 	m = vec_scalar_mul(&oc, &tmp->norm) + t * vec_scalar_mul(ray, &tmp->norm);

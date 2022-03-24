@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:04 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/23 19:27:53 by bstrong          ###   ########.fr       */
+/*   Updated: 2022/03/24 11:48:45 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,22 @@ int	key_hook(int button, t_data *data)
 		data->cam.pos.z -= 1;
 	if (button == KEY_Q)
 	{
-		data->cam.alpha += 0.05;
+		data->cam.alpha = 0.05;
 		rotate_cam_x(&data->cam);
 	}
 	if (button == KEY_A)
 	{
-		data->cam.alpha -= 0.05;
+		data->cam.alpha = -0.05;
 		rotate_cam_x(&data->cam);
 	}
 	if (button == KEY_W)
 	{
-		data->cam.betta += 0.05;
+		data->cam.betta = 0.05;
 		rotate_cam_y(&data->cam);
 	}
 	if (button == KEY_S)
 	{
-		data->cam.betta -= 0.05;
+		data->cam.betta = -0.05;
 		rotate_cam_y(&data->cam);
 	}
 	draw(data);
