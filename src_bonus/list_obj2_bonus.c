@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   list_obj2_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 19:14:04 by bstrong           #+#    #+#             */
-/*   Updated: 2022/03/23 22:06:02 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/24 20:46:46 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt_bonus.h"
+
+static void	init_check_board(int *check, t_color *color, char *rule, \
+								t_data *data, int line)
+{
+	*check = !ft_strncmp(rule, "check", 6);
+	if (!*check)
+		*color = get_color_check(rule, data, line);
+}
 
 void	init_sphere(char **lines, t_data *data, int line)
 {
@@ -27,9 +35,7 @@ void	init_sphere(char **lines, t_data *data, int line)
 	new_obj->key = "sp";
 	((t_sph *)new_obj->par)->cntr = get_vector_check(lines[1], 0, data, line);
 	((t_sph *)new_obj->par)->radius = ft_atof(lines[2]) / 2.;
-	new_obj->checker = !ft_strncmp(lines[3], "check", 6);
-	if (!new_obj->checker)
-		new_obj->color = get_color_check(lines[3], data, line);
+	init_check_board(&new_obj->checker, &new_obj->color, lines[3], data, line);
 	if (((t_sph *)new_obj->par)->radius <= 0 && free_void(new_obj->par)
 		&& free_void(new_obj))
 		error("init sphere (parameters)", data, line);
@@ -53,9 +59,7 @@ void	init_plane(char **lines, t_data *data, int line)
 	new_obj->key = "pl";
 	((t_pl *)new_obj->par)->c = get_vector_check(lines[1], 0, data, line);
 	((t_pl *)new_obj->par)->n = get_vector_check(lines[2], 1, data, line);
-	new_obj->checker = !ft_strncmp(lines[3], "check", 6);
-	if (!new_obj->checker)
-		new_obj->color = get_color_check(lines[3], data, line);
+	init_check_board(&new_obj->checker, &new_obj->color, lines[3], data, line);
 	new_obj->spec = ft_atof(lines[4]);
 	new_obj->refl = ft_atof(lines[5]);
 	vec_norm(&((t_pl *)new_obj->par)->n);
@@ -84,9 +88,7 @@ void	init_cylinder(char **lines, t_data *data, int line)
 		&& free_void(new_obj->par) && free_void(new_obj))
 		error("init cylinder (parameters)", data, line);
 	((t_cy *)new_obj->par)->part = 0;
-	new_obj->checker = !ft_strncmp(lines[5], "check", 6);
-	if (!new_obj->checker)
-		new_obj->color = get_color_check(lines[5], data, line);
+	init_check_board(&new_obj->checker, &new_obj->color, lines[5], data, line);
 	new_obj->spec = ft_atof(lines[6]);
 	new_obj->refl = ft_atof(lines[7]);
 	vec_norm(&((t_cy *)new_obj->par)->norm);
@@ -114,10 +116,7 @@ void	init_cone(char **lines, t_data *data, int line)
 		&& free_void(new_obj))
 		error("init cone (parameters)", data, line);
 	((t_co *)new_obj->par)->part = 0;
-	new_obj->checker = !ft_strncmp(lines[3], "check", 6);
-	if (new_obj->checker)
-		error("Cone havent checkerboard color distribution :(", data, -1);
-	new_obj->color = get_color_check(lines[5], data, line);
+	init_check_board(&new_obj->checker, &new_obj->color, lines[5], data, line);
 	new_obj->spec = ft_atof(lines[6]);
 	new_obj->refl = ft_atof(lines[7]);
 	vec_norm(&((t_co *)new_obj->par)->norm);

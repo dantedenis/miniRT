@@ -18,6 +18,8 @@ t_color	get_color_check(char *str, t_data *data, int line)
 	int			len;
 	char		**temp;
 
+	if (!ft_strncmp(str, "check", 6))
+		error("Cone havent checkerboard color distriction :(", data, -1);
 	temp = ft_split(str, ',');
 	len = len_arr(temp);
 	if (len != 3)
@@ -55,6 +57,8 @@ void	init_camera(char **lines, t_data *data, int line)
 	data->cam.orient = get_vector_check(lines[2], 1, data, line);
 	vec_norm(&data->cam.orient);
 	data->cam.fov = ft_atof(lines[3]);
+	if (data->cam.fov < 0 || data->cam.fov > 180)
+		error("init camera (parameters)", data, line);
 	if (fabs(data->cam.orient.y) != 1)
 		data->cam.up = new_vector(0, 1, 0);
 	else

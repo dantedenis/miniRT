@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/24 12:12:30 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/24 20:50:01 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	main(int argc, char **argv)
 	data.mlx = mlx_init();
 	if (!data.mlx)
 		error(ERROR_MLX, &data, -1);
-	data.w = 1000;
-	data.h = 1000;
+	data.w = 240;
+	data.h = 320;
 	data.whratio = (float) data.h / data.w;
 	data.win = mlx_new_window(data.mlx, data.w, data.h, "miniRT");
 	if (!data.win)

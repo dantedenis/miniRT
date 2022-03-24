@@ -55,6 +55,8 @@ void	init_camera(char **lines, t_data *data, int line)
 	data->cam.orient = get_vector_check(lines[2], 1, data, line);
 	vec_norm(&data->cam.orient);
 	data->cam.fov = ft_atof(lines[3]);
+	if (data->cam.fov < 0 || data->cam.fov > 180)
+		error("init camera (parameters)", data, line);
 	if (fabs(data->cam.orient.y) != 1)
 		data->cam.up = new_vector(0, 1, 0);
 	else

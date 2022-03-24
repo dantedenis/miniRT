@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key_hooks_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
+/*   By: bstrong <bstrong@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:04 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/24 11:48:45 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/24 21:20:39 by bstrong          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,33 @@ int	key_hook(int button, t_data *data)
 		data->cam.pos.z -= 1;
 	if (button == KEY_Q)
 	{
-		data->cam.alpha = 0.05;
+		data->cam.alpha = 1;
 		rotate_cam_x(&data->cam);
 	}
 	if (button == KEY_A)
 	{
-		data->cam.alpha = -0.05;
+		data->cam.alpha = -1;
 		rotate_cam_x(&data->cam);
 	}
 	if (button == KEY_W)
 	{
-		data->cam.betta = 0.05;
+		data->cam.betta = 1;
 		rotate_cam_y(&data->cam);
 	}
 	if (button == KEY_S)
 	{
-		data->cam.betta = -0.05;
+		data->cam.betta = -1;
 		rotate_cam_y(&data->cam);
+	}
+	if (button == KEY_E)
+	{
+		data->cam.gamma = 0.05;
+		rotate_cam_z(&data->cam);
+	}
+	if (button == KEY_D)
+	{
+		data->cam.gamma = -0.05;
+		rotate_cam_z(&data->cam);
 	}
 	draw(data);
 	return (0);

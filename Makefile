@@ -23,13 +23,6 @@ ifndef U_OS
 	endif
 endif
 
-ifdef ECHO
-	HIT_TOTAL = $(words $(SRC_LST) minirt)
-	HIT_COUNT = $(eval HIT_N != expr $(HIT_N) '+' 1) $(HIT_N)
-	ECHO =	echo c $(HIT_COUNT) t$(HIT_TOTAL) $@
-endif
-
-
 SRC_LST		=	colors.c				compute_light.c		cylinder.c\
 				image.c					key_hooks.c			lights.c\
 				list_obj1.c				list_obj2.c			message.c\
@@ -52,7 +45,6 @@ OBJ			= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST)))
 OBJ_B		= $(addprefix $(OBJ_PATH), $(patsubst %.c, %.o, $(SRC_LST_B)))
 
 .PHONY:		 all bonus clean fclean re bonus
-#.SILENT:	all clean fclean re
 
 all:  $(LIBS) $(OBJ_PATH) $(NAME)
 
