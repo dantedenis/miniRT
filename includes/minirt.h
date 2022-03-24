@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:14:36 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 17:04:00 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/12 18:52:31 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,14 @@ typedef struct s_pl
 	t_vec			n;
 	float			d;
 }	t_pl;
+
+typedef struct s_cy
+{
+	t_vec	cntr;
+	t_vec	n;
+	float	d;
+	float	h;	
+}	t_cy;
 
 typedef struct s_obj
 {

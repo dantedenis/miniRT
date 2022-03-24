@@ -6,7 +6,7 @@
 /*   By: lcoreen <lcoreen@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/21 18:11:11 by lcoreen           #+#    #+#             */
-/*   Updated: 2022/03/12 18:12:01 by lcoreen          ###   ########.fr       */
+/*   Updated: 2022/03/12 19:03:06 by lcoreen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ float	intersect_sphere(t_sph *tmp, t_vec *ray, t_vec *o, float *t2)
 	float		k1;
 	float		k2;
 	float		k3;
-	float	descr;
+	float		descr;
 	t_vec	*oc;
 
 	oc = vec_sub(o, &tmp->cntr);
